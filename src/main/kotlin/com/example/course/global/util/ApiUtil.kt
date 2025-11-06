@@ -1,6 +1,7 @@
 package com.example.course.global.util
 
 import com.example.course.global.response.ApiResponse
+import com.example.course.global.response.ErrorResponse
 
 object ApiUtil {
 
@@ -14,4 +15,11 @@ object ApiUtil {
         ApiResponse(
             success = true
         )
+
+    fun error(errorResponse: ErrorResponse): ApiResponse<Any> =
+        ApiResponse(
+            success = false,
+            errorResponse = errorResponse
+        )
+
 }
