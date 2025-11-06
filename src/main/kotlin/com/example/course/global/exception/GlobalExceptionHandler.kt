@@ -20,7 +20,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException::class)
     fun handleRuntimeException(exception: RuntimeException): ResponseEntity<ApiResponse<*>> {
-        return handleException(exception, ErrorResponse.from(ErrorCode.INTERVAL_SERVER_ERROR))
+        return handleException(exception, ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR))
     }
 
     private fun handleException(exception: Exception, errorResponse: ErrorResponse): ResponseEntity<ApiResponse<*>> {

@@ -9,5 +9,5 @@ enum class ErrorCode(
 ) {
 
     // Global (0)
-    INTERVAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G000", "서버 내부에 문제가 발생했습니다.")
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G000", "서버 내부에 문제가 발생했습니다.")
 }
