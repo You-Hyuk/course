@@ -10,6 +10,7 @@ enum class ErrorCode(
 
     // Global
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G000", "서버 내부에 문제가 발생했습니다."),
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "G001", "올바르지 않은 입력값입니다."),
 
     // Department
     DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "D000", "해당 전공이 존재하지 않습니다."),

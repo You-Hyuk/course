@@ -13,13 +13,13 @@ class StudentService(
     val departmentRepository: DepartmentRepository
 ) {
     fun generateNewStudent(request: PostStudentRequest) {
-        val department = departmentRepository.findDepartmentByName(request.departmentName)
+        val department = departmentRepository.findDepartmentByName(request.departmentName!!)
             ?: throw DepartmentNotFoundException()
 
         val student = Student(
-            name = request.studentName,
-            number = request.studentNumber,
-            password = request.password,
+            name = request.studentName!!,
+            number = request.studentNumber!!,
+            password = request.password!!,
             departmentId = department.id!!
         )
 
