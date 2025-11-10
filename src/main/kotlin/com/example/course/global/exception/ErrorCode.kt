@@ -16,5 +16,7 @@ enum class ErrorCode(
 
     // Student
     INVALID_STUDENT_NAME_LENGTH(HttpStatus.BAD_REQUEST, "S000", "학생 이름은 2글자 이상 4글자 이하여야 합니다."),
-    INVALID_STUDENT_NUMBER_LENGTH(HttpStatus.BAD_REQUEST, "S001", "학번의 길이는 9글자입니다.")
+    INVALID_STUDENT_NUMBER_LENGTH(HttpStatus.BAD_REQUEST, "S001", "학번의 길이는 9글자입니다."),
+    INVALID_STUDENT_PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "S002", "비밀번호는 8글자 이상 20글자 이하여야 합니다."),
+    INVALID_STUDENT_NUMBER_FORMAT(HttpStatus.BAD_REQUEST, "S003", "학번의 앞 4글자는 2000 이상 2025 이하여야 합니다.")
 }
