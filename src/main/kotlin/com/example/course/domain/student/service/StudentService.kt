@@ -5,6 +5,7 @@ import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.PostStudentRequest
 import com.example.course.domain.student.entity.Student
 import com.example.course.domain.student.exception.DepartmentNotFoundException
+import com.example.course.domain.student.exception.DuplicateStudentException
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,6 +16,10 @@ class StudentService(
     fun generateNewStudent(request: PostStudentRequest) {
         val department = departmentRepository.findDepartmentByName(request.departmentName!!)
             ?: throw DepartmentNotFoundException()
+
+        if (studentRepository.existsByNumber(request.studentNumber!!)) {
+            throw DuplicateStudentException()
+        }
 
         val student = Student(
             name = request.studentName!!,
