@@ -63,4 +63,8 @@ class Student(
             throw InvalidStudentPasswordLengthException()
         }
     }
+
+    fun checkPassword(password: String): Boolean {
+        return this.password == password
+    }
 }

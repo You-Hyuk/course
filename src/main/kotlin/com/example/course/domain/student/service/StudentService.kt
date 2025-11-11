@@ -36,8 +36,9 @@ class StudentService(
 
     fun signIn(request: PostStudentSignInRequest): PostStudentSignInResponse {
         val student = studentRepository.findByNumber(request.studentNumber!!)
+            ?: throw InvalidStudentCredentialsException()
 
-        if (student == null || student.password != request.password) {
+        if (student.checkPassword(request.password!!)) {
             throw InvalidStudentCredentialsException()
         }
 
