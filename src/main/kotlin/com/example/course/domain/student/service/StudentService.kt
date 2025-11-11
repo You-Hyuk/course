@@ -9,6 +9,7 @@ import com.example.course.domain.student.entity.Student
 import com.example.course.domain.student.exception.DepartmentNotFoundException
 import com.example.course.domain.student.exception.DuplicateStudentException
 import com.example.course.domain.student.exception.InvalidStudentCredentialsException
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,6 +17,7 @@ class StudentService(
     val studentRepository: StudentRepository,
     val departmentRepository: DepartmentRepository
 ) {
+    @Transactional
     fun generateNewStudent(request: PostStudentRequest) {
         val department = departmentRepository.findDepartmentByName(request.departmentName!!)
             ?: throw DepartmentNotFoundException()
@@ -34,6 +36,7 @@ class StudentService(
         studentRepository.save(student)
     }
 
+    @Transactional
     fun signIn(request: PostStudentSignInRequest): PostStudentSignInResponse {
         val student = studentRepository.findByNumber(request.studentNumber!!)
             ?: throw InvalidStudentCredentialsException()
