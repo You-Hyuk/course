@@ -3,9 +3,9 @@ package com.example.course.domain.student.entity
 import com.example.course.domain.student.exception.InvalidStudentNameLengthException
 import com.example.course.domain.student.exception.InvalidStudentNumberLengthException
 import com.example.course.domain.student.exception.InvalidStudentPasswordLengthException
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.Test
 
 class StudentTest {
 
