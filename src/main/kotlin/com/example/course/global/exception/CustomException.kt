@@ -1,3 +1,3 @@
 package com.example.course.global.exception
 
-class CustomException(val errorCode: ErrorCode) : RuntimeException(errorCode.message)
+open class CustomException(val errorCode: ErrorCode) : RuntimeException(errorCode.message)
