@@ -31,7 +31,7 @@ class StudentServiceTest {
     lateinit var studentService: StudentService
 
     @Test
-    fun `정상적인 학생 회원가입 성공`() {
+    fun 학생_회원가입_성공() {
         // given
         val request = PostStudentRequest(
             studentName = "홍길동",
