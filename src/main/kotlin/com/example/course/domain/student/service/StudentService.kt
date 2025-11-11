@@ -41,7 +41,7 @@ class StudentService(
         val student = studentRepository.findByNumber(request.studentNumber!!)
             ?: throw InvalidStudentCredentialsException()
 
-        if (student.checkPassword(request.password!!)) {
+        if (!student.checkPassword(request.password!!)) {
             throw InvalidStudentCredentialsException()
         }
 
