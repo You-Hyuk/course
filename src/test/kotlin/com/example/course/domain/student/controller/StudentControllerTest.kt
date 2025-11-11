@@ -59,7 +59,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 이름이_null인_경우_예외발생() {
+    fun 회원가입_시_이름이_null인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -80,7 +80,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 이름이_공백인_경우_예외발생() {
+    fun 회원가입_시_이름이_공백인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -101,7 +101,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 학번이_null인_경우_예외발생() {
+    fun 회원가입_시_학번이_null인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -122,7 +122,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 학번이_공백인_경우_예외발생() {
+    fun 회원가입_시_학번이_공백인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -143,7 +143,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 비밀번호가_null인_경우_예외발생() {
+    fun 회원가입_시_비밀번호가_null인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -164,7 +164,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 비밀번호가_공백인_경우_예외발생() {
+    fun 회원가입_시_비밀번호가_공백인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -185,7 +185,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 학과명이_null인_경우_예외발생() {
+    fun 회원가입_시_학과명이_null인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -206,7 +206,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 학과명이_공백인_경우_예외발생() {
+    fun 회원가입_시_학과명이_공백인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -226,7 +226,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 로그인_시_학번이_null인_경우_예외발생() {
+    fun 로그인_시_학번이_null인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -244,7 +244,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 로그인_시_학번이_공백인_경우_예외발생() {
+    fun 로그인_시_학번이_공백인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -262,7 +262,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 로그인_시_비밀번호가_null인_경우_예외발생() {
+    fun 로그인_시_비밀번호가_null인_경우_예외_발생() {
         //given
         val request = """
             {
@@ -280,7 +280,7 @@ class StudentControllerTest {
     }
 
     @Test
-    fun 로그인_시_비밀번호가_공백인_경우_예외발생() {
+    fun 로그인_시_비밀번호가_공백인_경우_예외_발생() {
         //given
         val request = """
             {

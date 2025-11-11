@@ -34,7 +34,7 @@ class StudentServiceTest {
     lateinit var studentService: StudentService
 
     @Test
-    fun 학생_회원가입_성공() {
+    fun 회원가입_성공() {
         // given
         val request = PostStudentRequest(
             studentName = "홍길동",
@@ -82,7 +82,7 @@ class StudentServiceTest {
     }
 
     @Test
-    fun 이미_존재하는_학번으로_회원가입_하는_경우_예외발생() {
+    fun 회원가입_시_이미_해당_학번이_존재하는_경우_예외_발생() {
         // given
         val request = PostStudentRequest(
             studentName = "홍길동",
@@ -107,7 +107,7 @@ class StudentServiceTest {
 
 
     @Test
-    fun 존재하지_않는_학과를_입력한_경우_예외발생() {
+    fun 회원가입_시_존재하지_않는_학과를_입력한_경우_예외_발생() {
         // given
         val request = PostStudentRequest(
             studentName = "홍길동",
@@ -128,7 +128,7 @@ class StudentServiceTest {
     }
 
     @Test
-    fun 존재하지_않는_학번으로_로그인하는_경우_예외발생() {
+    fun 존재하지_않는_학번으로_로그인하는_경우_예외_발생() {
         //given
         val request = PostStudentSignInRequest(
             studentNumber = "202512345",
@@ -145,7 +145,7 @@ class StudentServiceTest {
     }
 
     @Test
-    fun 일치하지_않는_비밀번호로_로그인하는_경우_예외발생() {
+    fun 로그인_시_일치하지_않는_비밀번호를_입력한_경우_예외_발생() {
         //given
         val student = Student(
             id = 1L,

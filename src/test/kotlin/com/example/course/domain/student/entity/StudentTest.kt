@@ -57,7 +57,7 @@ class StudentTest {
     }
 
     @Test
-    fun 이름이_2글자_이하인_경우_예외발생() {
+    fun 이름이_2글자_이하인_경우_예외_발생() {
         assertThrows<InvalidStudentNameLengthException> {
             Student(
                 name = "이",
@@ -69,7 +69,7 @@ class StudentTest {
     }
 
     @Test
-    fun 이름이_4글자_이상인_경우_예외발생() {
+    fun 이름이_4글자_이상인_경우_예외_발생() {
         assertThrows<InvalidStudentNameLengthException> {
             Student(
                 name = "이름이름이",
@@ -81,7 +81,7 @@ class StudentTest {
     }
 
     @Test
-    fun 비밀번호가_8글자_이하인_경우_예외발생() {
+    fun 비밀번호가_8글자_이하인_경우_예외_발생() {
         assertThrows<InvalidStudentPasswordLengthException> {
             Student(
                 name = "이름",
@@ -93,7 +93,7 @@ class StudentTest {
     }
 
     @Test
-    fun 비밀번호가_20글자_이하인_경우_예외발생() {
+    fun 비밀번호가_20글자_이하인_경우_예외_발생() {
         assertThrows<InvalidStudentPasswordLengthException> {
             Student(
                 name = "이름",
@@ -105,7 +105,7 @@ class StudentTest {
     }
 
     @Test
-    fun 학번이_9글자가_아닌_경우_예외발생() {
+    fun 학번이_9글자가_아닌_경우_예외_발생() {
         assertThrows<InvalidStudentNumberLengthException> {
             Student(
                 name = "이름",
@@ -117,7 +117,7 @@ class StudentTest {
     }
 
     @Test
-    fun 학번의_앞_네글자가_2000보다_작은_경우_예외발생() {
+    fun 학번의_앞_네글자가_2000보다_작은_경우_예외_발생() {
         assertThrows<InvalidStudentNumberLengthException> {
             Student(
                 name = "이름",
@@ -129,7 +129,7 @@ class StudentTest {
     }
 
     @Test
-    fun 학번의_앞_네글자가_2025보다_큰_경우_예외발생() {
+    fun 학번의_앞_네글자가_2025보다_큰_경우_예외_발생() {
         assertThrows<InvalidStudentNumberLengthException> {
             Student(
                 name = "이름",
