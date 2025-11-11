@@ -3,9 +3,12 @@ package com.example.course.domain.student.service
 import com.example.course.domain.student.dao.DepartmentRepository
 import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.PostStudentRequest
+import com.example.course.domain.student.dto.PostStudentSignInRequest
+import com.example.course.domain.student.dto.PostStudentSignInResponse
 import com.example.course.domain.student.entity.Student
 import com.example.course.domain.student.exception.DepartmentNotFoundException
 import com.example.course.domain.student.exception.DuplicateStudentException
+import com.example.course.domain.student.exception.InvalidStudentCredentialsException
 import org.springframework.stereotype.Service
 
 @Service
@@ -29,5 +32,15 @@ class StudentService(
         )
 
         studentRepository.save(student)
+    }
+
+    fun signIn(request: PostStudentSignInRequest): PostStudentSignInResponse {
+        val student = studentRepository.findByNumber(request.studentNumber!!)
+
+        if (student == null || student.password != request.password) {
+            throw InvalidStudentCredentialsException()
+        }
+
+        return PostStudentSignInResponse(student.id!!)
     }
 }

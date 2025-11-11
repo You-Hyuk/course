@@ -20,5 +20,6 @@ enum class ErrorCode(
     INVALID_STUDENT_NUMBER_LENGTH(HttpStatus.BAD_REQUEST, "S001", "학번의 길이는 9글자입니다."),
     INVALID_STUDENT_PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "S002", "비밀번호는 8글자 이상 20글자 이하여야 합니다."),
     INVALID_STUDENT_NUMBER_FORMAT(HttpStatus.BAD_REQUEST, "S003", "학번의 앞 4글자는 2000 이상 2025 이하여야 합니다."),
-    DUPLICATE_STUDENT_EXCEPTION(HttpStatus.CONFLICT, "S004", "동일한 학번의 계정이 존재합니다.")
+    DUPLICATE_STUDENT_EXCEPTION(HttpStatus.CONFLICT, "S004", "동일한 학번의 계정이 존재합니다."),
+    INVALID_STUDENT_CREDENTIALS(HttpStatus.UNAUTHORIZED, "S005", "학생 인증 정보가 올바르지 않습니다.")
 }
