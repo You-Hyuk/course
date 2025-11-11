@@ -3,10 +3,13 @@ package com.example.course.domain.student.service
 import com.example.course.domain.student.dao.DepartmentRepository
 import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.PostStudentRequest
+import com.example.course.domain.student.dto.PostStudentSignInRequest
 import com.example.course.domain.student.entity.Department
 import com.example.course.domain.student.entity.Student
 import com.example.course.domain.student.exception.DepartmentNotFoundException
 import com.example.course.domain.student.exception.DuplicateStudentException
+import com.example.course.domain.student.exception.InvalidStudentCredentialsException
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -53,6 +56,32 @@ class StudentServiceTest {
     }
 
     @Test
+    fun 로그인_성공() {
+        //given
+        val student = Student(
+            id = 1L,
+            name = "이름",
+            password = "12345678",
+            number = "202512345",
+            departmentId = 1L
+        )
+        val request = PostStudentSignInRequest(
+            studentNumber = "202512345",
+            password = "12345678",
+        )
+
+        given(studentRepository.findByNumber("202512345"))
+            .willReturn(student)
+
+        // when
+        val response = studentService.signIn(request)
+
+        // then
+        Assertions.assertThat(response).isNotNull
+        Assertions.assertThat(response.studentId).isEqualTo(student.id)
+    }
+
+    @Test
     fun 이미_존재하는_학번으로_회원가입_하는_경우_예외발생() {
         // given
         val request = PostStudentRequest(
@@ -96,5 +125,46 @@ class StudentServiceTest {
         }
 
         verify(studentRepository, never()).save(any(Student::class.java))
+    }
+
+    @Test
+    fun 존재하지_않는_학번으로_로그인하는_경우_예외발생() {
+        //given
+        val request = PostStudentSignInRequest(
+            studentNumber = "202512345",
+            password = "12345678",
+        )
+
+        given(studentRepository.findByNumber("202512345"))
+            .willReturn(null)
+
+        // when & then
+        assertThrows <InvalidStudentCredentialsException> {
+            studentService.signIn(request)
+        }
+    }
+
+    @Test
+    fun 일치하지_않는_비밀번호로_로그인하는_경우_예외발생() {
+        //given
+        val student = Student(
+            id = 1L,
+            name = "이름",
+            password = "12345678",
+            number = "202512345",
+            departmentId = 1L
+        )
+        val request = PostStudentSignInRequest(
+            studentNumber = "202512345",
+            password = "87654321",
+        )
+
+        given(studentRepository.findByNumber("202512345"))
+            .willReturn(student)
+
+        // when & then
+        assertThrows <InvalidStudentCredentialsException> {
+            studentService.signIn(request)
+        }
     }
 }

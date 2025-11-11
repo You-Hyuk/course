@@ -3,6 +3,7 @@ package com.example.course.domain.student.entity
 import com.example.course.domain.student.exception.InvalidStudentNameLengthException
 import com.example.course.domain.student.exception.InvalidStudentNumberLengthException
 import com.example.course.domain.student.exception.InvalidStudentPasswordLengthException
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertThrows
@@ -19,6 +20,40 @@ class StudentTest {
         )
 
         assertNotNull(student)
+    }
+
+    @Test
+    fun 학생의_비밀번호가_일치하는_경우_True_반환_성공() {
+        //given
+        val student = Student(
+            name = "이름",
+            password = "12345678",
+            number = "202512345",
+            departmentId = 1L
+        )
+
+        // when
+        val result = student.checkPassword("12345678")
+
+        // then
+        Assertions.assertTrue(result)
+    }
+
+    @Test
+    fun 학생의_비밀번호가_일치하지_않는_경우_False_반환_성공() {
+        //given
+        val student = Student(
+            name = "이름",
+            password = "12345678",
+            number = "202512345",
+            departmentId = 1L
+        )
+
+        // when
+        val result = student.checkPassword("87654321")
+
+        // then
+        Assertions.assertFalse(result)
     }
 
     @Test

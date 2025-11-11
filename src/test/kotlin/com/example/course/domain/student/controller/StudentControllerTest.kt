@@ -41,6 +41,24 @@ class StudentControllerTest {
     }
 
     @Test
+    fun 학생_로그인_성공() {
+        //given
+        val request = """
+            {
+                "studentNumber": "200012345",
+                "password": "12345678"
+            }
+        """.trimIndent()
+
+        // when & then
+        mockMvc.perform(
+            post("/students/signin")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+        ).andExpect { status().isOk }
+    }
+
+    @Test
     fun 이름이_null인_경우_예외발생() {
         //given
         val request = """
@@ -204,7 +222,78 @@ class StudentControllerTest {
             post("/students/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
-
         ).andExpect(status().is4xxClientError)
+    }
+
+    @Test
+    fun 로그인_시_학번이_null인_경우_예외발생() {
+        //given
+        val request = """
+            {
+                "studentNumber": null,
+                "password": "12345678"
+            }
+        """.trimIndent()
+
+        // when & then
+        mockMvc.perform(
+            post("/students/signin")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+        ).andExpect { status().is4xxClientError }
+    }
+
+    @Test
+    fun 로그인_시_학번이_공백인_경우_예외발생() {
+        //given
+        val request = """
+            {
+                "studentNumber": "",
+                "password": "12345678"
+            }
+        """.trimIndent()
+
+        // when & then
+        mockMvc.perform(
+            post("/students/signin")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+        ).andExpect { status().is4xxClientError }
+    }
+
+    @Test
+    fun 로그인_시_비밀번호가_null인_경우_예외발생() {
+        //given
+        val request = """
+            {
+                "studentNumber": "202512345",
+                "password": null
+            }
+        """.trimIndent()
+
+        // when & then
+        mockMvc.perform(
+            post("/students/signin")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+        ).andExpect { status().is4xxClientError }
+    }
+
+    @Test
+    fun 로그인_시_비밀번호가_공백인_경우_예외발생() {
+        //given
+        val request = """
+            {
+                "studentNumber": "202512345",
+                "password": ""
+            }
+        """.trimIndent()
+
+        // when & then
+        mockMvc.perform(
+            post("/students/signin")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+        ).andExpect { status().is4xxClientError }
     }
 }
