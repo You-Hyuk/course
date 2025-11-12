@@ -8,13 +8,16 @@ import com.example.course.domain.lecture.enums.CourseType
 import com.example.course.domain.lecture.enums.TimeSlot
 
 data class LectureDto(
+    val lectureId: Long,
     val courseName: String,
     val professorName: String,
     val timeSlots: List<TimeSlot>,
     val courseGrade: Int,
     val courseType: CourseType,
     val courseCredit: Int,
-    val lectureCode: String
+    val lectureCode: String,
+    val lectureCurrentEnrollment: Int,
+    val lectureCapacity: Int
 ) {
     companion object {
         fun from(
@@ -24,13 +27,16 @@ data class LectureDto(
             lectureTimes: List<LectureTime>
         ): LectureDto {
             return LectureDto(
+                lectureId = lecture.id!!,
                 courseName = course.name,
                 professorName = professor.name,
                 timeSlots = lectureTimes.map { it.timeSlot }.sortedBy { it.ordinal },
                 courseGrade = course.grade,
                 courseType = course.type,
                 courseCredit = course.credit,
-                lectureCode = lecture.code
+                lectureCode = lecture.code,
+                lectureCurrentEnrollment = lecture.currentEnrollment,
+                lectureCapacity = lecture.capacity
             )
         }
     }
