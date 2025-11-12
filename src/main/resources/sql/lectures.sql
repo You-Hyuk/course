@@ -1,4 +1,4 @@
-INSERT INTO lectures (id, course_id, professor_id, year, semester, capacity, current_enrollment, code) VALUES (1, 1, 1, 2025, 'SPRING', 50, 47, '10001'),
+INSERT INTO lectures (id, course_id, professor_id, lecture_year, semester, capacity, current_enrollment, code) VALUES (1, 1, 1, 2025, 'SPRING', 50, 47, '10001'),
        (2, 1, 2, 2025, 'FALL', 60, 53, '10002'),
        (3, 2, 3, 2025, 'SPRING', 45, 36, '10003'),
        (4, 2, 4, 2025, 'FALL', 70, 57, '10004'),

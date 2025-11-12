@@ -25,7 +25,7 @@ class Lecture(
     @Column(name = "professor_id", updatable = true, nullable = false)
     val professorId: Long,
 
-    @Column(name = "year", updatable = true, nullable = false)
+    @Column(name = "lecture_year", updatable = true, nullable = false)
     val year: Int,
 
     @Enumerated(EnumType.STRING)
