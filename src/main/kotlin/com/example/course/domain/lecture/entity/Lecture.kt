@@ -22,20 +22,20 @@ class Lecture(
     @Column(name = "course_id", updatable = true, nullable = false)
     val courseId: Long,
 
-    @Column(name = "professor_id", updatable = true, nullable = true)
-    val professorId: Long? = null,
+    @Column(name = "professor_id", updatable = true, nullable = false)
+    val professorId: Long,
 
     @Column(name = "year", updatable = true, nullable = false)
     val year: Int,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "semester", updatable = true, nullable = false, columnDefinition = "VARCHAR(32)")
+    @Column(name = "semester", updatable = true, nullable = false, columnDefinition = "varchar(20)")
     val semester: Semester,
 
-    @Column(name = "capacity", updatable = true, nullable = true)
+    @Column(name = "capacity", updatable = true, nullable = false)
     val capacity: Int,
 
-    @Column(name = "current_enrollment", updatable = true, nullable = true)
+    @Column(name = "current_enrollment", updatable = true, nullable = false)
     val currentEnrollment: Int,
 
     @Column(name = "code", nullable = false, updatable = false)

@@ -23,7 +23,7 @@ class Course(
     val name: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = true, updatable = false)
+    @Column(name = "type", nullable = true, updatable = false, columnDefinition = "varchar(20)")
     val type: CourseType,
 
     @Column(name = "credit", nullable = true, updatable = false)
@@ -32,6 +32,6 @@ class Course(
     @Column(name = "grade", nullable = false, updatable = false)
     val grade: Int,
 
-    @Column(name = "department_id", nullable = false, updatable = true)
+    @Column(name = "department_id", nullable = false, updatable = false)
     val departmentId: Long
 )

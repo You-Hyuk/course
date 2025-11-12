@@ -23,6 +23,6 @@ class LectureTime(
     val lectureId: Long,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "period", nullable = false, updatable = false)
+    @Column(name = "time_slot", nullable = false, updatable = false, columnDefinition = "varchar(20)")
     val timeSlot: TimeSlot
 )
