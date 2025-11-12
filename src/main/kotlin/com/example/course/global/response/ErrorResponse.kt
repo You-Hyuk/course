@@ -25,5 +25,13 @@ data class ErrorResponse(
                 errorMessage = errorCode.message
             )
         }
+
+        fun from(errorCode: ErrorCode, errorMessage: String): ErrorResponse {
+            return ErrorResponse(
+                status = errorCode.status.value(),
+                code = errorCode.code,
+                errorMessage = errorMessage
+            )
+        }
     }
 }
