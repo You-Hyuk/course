@@ -11,9 +11,13 @@ interface LectureTimeRepository : JpaRepository<LectureTime, Long> {
         """
         SELECT lt.lectureId
         FROM LectureTime lt
+        WHERE lt.timeSlot IN :timeSlots
         GROUP BY lt.lectureId
-        HAVING SUM(CASE WHEN lt.timeSlot NOT IN :timeSlots THEN 1 ELSE 0 END) = 0
-            AND SUM(CASE WHEN lt.timeSlot IN :timeSlots THEN 1 ELSE 0 END) > 0
+        HAVING COUNT(DISTINCT lt.timeSlot) = (
+            SELECT COUNT(DISTINCT lt2.timeSlot)
+            FROM LectureTime lt2
+            WHERE lt2.lectureId = lt.lectureId
+        )
     """
     )
     fun findLectureIdsContainedIn(

@@ -84,9 +84,9 @@ class LectureService(
     ).takeIf { it.isNotEmpty() }
 
     private fun findLectureIdsByTimeSlots(timeSlots: List<TimeSlot>?): List<Long>? {
-        if (timeSlots.isNullOrEmpty()) return null
-        val ids = lectureTimeRepository.findLectureIdsContainedIn(timeSlots)
-        return ids.takeIf { it.isNotEmpty() }
+        return timeSlots?.takeIf { it.isNotEmpty() }?.let {
+            lectureTimeRepository.findLectureIdsContainedIn(it)
+        }
     }
 
     private fun findCourseMap(lectures: List<Lecture>): Map<Long, Course> {
