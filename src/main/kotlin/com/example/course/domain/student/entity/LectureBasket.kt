@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.persistence.Transient
 
 @Entity
 @Table(name = "lecture_baskets")
@@ -31,5 +32,8 @@ class LectureBasket(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "semester", nullable = false, updatable = false, columnDefinition = "varchar(20)")
-    val semester: Semester
+    val semester: Semester,
+
+    @Transient
+    private val lectureBasketLectures: LectureBasketLectures = LectureBasketLectures()
 )
