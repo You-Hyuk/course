@@ -1,0 +1,26 @@
+package com.example.course.domain.lecture.enums
+
+import java.time.LocalTime
+
+
+enum class TimeSlot {
+    // Monday
+    MON_P1, MON_P2, MON_P3, MON_P4, MON_P5, MON_P6, MON_P7, MON_P8, MON_P9,
+    MON_P10, MON_P11, MON_P12, MON_P13, MON_P14, MON_P15, MON_P16, MON_P17, MON_P18,
+
+    // Tuesday
+    TUE_P1, TUE_P2, TUE_P3, TUE_P4, TUE_P5, TUE_P6, TUE_P7, TUE_P8, TUE_P9,
+    TUE_P10, TUE_P11, TUE_P12, TUE_P13, TUE_P14, TUE_P15, TUE_P16, TUE_P17, TUE_P18,
+
+    // Wednesday
+    WED_P1, WED_P2, WED_P3, WED_P4, WED_P5, WED_P6, WED_P7, WED_P8, WED_P9,
+    WED_P10, WED_P11, WED_P12, WED_P13, WED_P14, WED_P15, WED_P16, WED_P17, WED_P18,
+
+    // Thursday
+    THU_P1, THU_P2, THU_P3, THU_P4, THU_P5, THU_P6, THU_P7, THU_P8, THU_P9,
+    THU_P10, THU_P11, THU_P12, THU_P13, THU_P14, THU_P15, THU_P16, THU_P17, THU_P18,
+
+    // Friday
+    FRI_P1, FRI_P2, FRI_P3, FRI_P4, FRI_P5, FRI_P6, FRI_P7, FRI_P8, FRI_P9,
+    FRI_P10, FRI_P11, FRI_P12, FRI_P13, FRI_P14, FRI_P15, FRI_P16, FRI_P17, FRI_P18,
+}
