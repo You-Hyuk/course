@@ -149,6 +149,20 @@ class LectureBasketService(
         lectureBasket.rename(request.lectureBasketName!!)
     }
 
+    @Transactional
+    fun modifyDefaultLectureBasket(studentId: Long, lectureBasketId: Long) {
+        validateStudentExists(studentId)
+
+        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
+            .orElseThrow { LectureBasketNotFoundException() }
+
+        validateLectureBasketAccess(lectureBasket, studentId)
+
+        val defaultLectureBasket = lectureBasketRepository.findByStudentIdAndStatus(studentId, Status.DEFAULT)
+
+        lectureBasket.changeStatusToDefault(defaultLectureBasket)
+    }
+
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
         if (lectureBasketRepository.existsByYearAndSemester(year, semester)) {
             return Status.NORMAL

@@ -79,6 +79,11 @@ class LectureBasket(
         this.name = name
     }
 
+    fun changeStatusToDefault(defaultLectureBasket: LectureBasket) {
+        defaultLectureBasket.status = Status.NORMAL
+        this.status = Status.DEFAULT
+    }
+
     private fun validateNameLength(name: String) {
         if (name.length !in 1..20) {
             throw InvalidLectureBasketNameLengthException()

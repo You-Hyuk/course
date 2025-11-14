@@ -74,6 +74,15 @@ class LectureBasketController(
         return ApiUtil.successOnly()
     }
 
+    @PatchMapping("/{lectureBasketId}/default")
+    fun updateDefaultLectureBasket(
+        @PathVariable studentId: Long,
+        @PathVariable lectureBasketId: Long
+    ): ApiResponse<Void> {
+        lectureBasketService.modifyDefaultLectureBasket(studentId, lectureBasketId)
+        return ApiUtil.successOnly()
+    }
+
     @DeleteMapping("/{lectureBasketId}")
     fun removeLectureBasket(
         @PathVariable studentId: Long,
