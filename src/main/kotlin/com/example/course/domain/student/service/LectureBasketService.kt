@@ -8,7 +8,6 @@ import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.lecture.exception.CourseNotFoundException
 import com.example.course.domain.lecture.exception.LectureNotFoundException
 import com.example.course.domain.lecture.exception.ProfessorNotFoundException
-import com.example.course.domain.student.dao.LectureBasketLectureRepository
 import com.example.course.domain.student.dao.LectureBasketRepository
 import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.GetLectureBasketResponse
@@ -33,7 +32,6 @@ import java.time.LocalDate
 @Service
 class LectureBasketService(
     val lectureBasketRepository: LectureBasketRepository,
-    val lectureBasketLectureRepository: LectureBasketLectureRepository,
     val lectureTimeRepository: LectureTimeRepository,
     val studentRepository: StudentRepository,
     val lectureRepository: LectureRepository,
