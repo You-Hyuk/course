@@ -19,6 +19,7 @@ import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.entity.LectureBasket
 import com.example.course.domain.student.enums.Status
+import com.example.course.domain.student.exception.LectureBasketAccessDeniedException
 import com.example.course.domain.student.exception.LectureBasketNotFoundException
 import com.example.course.domain.student.exception.StudentNotFoundException
 import jakarta.transaction.Transactional
@@ -88,6 +89,18 @@ class LectureBasketService(
             )
     }
 
+    @Transactional
+    fun deleteLectureBasket(studentId: Long, lectureBasketId: Long) {
+        validateStudentExists(studentId)
+
+        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
+            .orElseThrow { LectureBasketNotFoundException() }
+
+        validateLectureBasketAccess(lectureBasket, studentId)
+
+        lectureBasketRepository.delete(lectureBasket)
+    }
+
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
         if (lectureBasketRepository.existsByYearAndSemester(year, semester)) {
             return Status.NORMAL
@@ -129,5 +142,11 @@ class LectureBasketService(
                     lectureBaskets = group.map { LectureBasketDto.from(it) }
                 )
             }
+    }
+
+    private fun validateLectureBasketAccess(lectureBasket: LectureBasket, studentId: Long) {
+        if (lectureBasket.studentId != studentId) {
+            throw LectureBasketAccessDeniedException()
+        }
     }
 }

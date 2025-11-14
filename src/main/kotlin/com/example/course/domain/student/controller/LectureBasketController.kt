@@ -7,6 +7,7 @@ import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.service.LectureBasketService
 import com.example.course.global.response.ApiResponse
 import com.example.course.global.util.ApiUtil
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -51,5 +52,14 @@ class LectureBasketController(
     fun readLectureBaskets(@PathVariable studentId: Long): ApiResponse<List<GetLectureBasketsResponse>> {
         val response = lectureBasketService.findLectureBaskets(studentId)
         return ApiUtil.success(response)
+    }
+
+    @DeleteMapping("/{lectureBasketId}")
+    fun removeLectureBasket(
+        @PathVariable studentId: Long,
+        @PathVariable lectureBasketId: Long
+    ): ApiResponse<Void> {
+        lectureBasketService.deleteLectureBasket(studentId, lectureBasketId)
+        return ApiUtil.successOnly()
     }
 }
