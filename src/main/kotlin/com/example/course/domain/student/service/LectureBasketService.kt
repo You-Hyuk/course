@@ -34,9 +34,7 @@ class LectureBasketService(
 ) {
     @Transactional
     fun addLectureToBasket(studentId: Long, lectureBasketId: Long, request: PostAddLectureToBasketRequest) {
-        if (!studentRepository.existsById(studentId)) {
-            throw StudentNotFoundException()
-        }
+        validateStudentExists(studentId)
 
         val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
             .orElseThrow { LectureBasketNotFoundException() }
@@ -51,9 +49,7 @@ class LectureBasketService(
 
     @Transactional
     fun generateLectureBasket(studentId: Long, request: PostLectureBasketRequest) {
-        if (!studentRepository.existsById(studentId)) {
-            throw StudentNotFoundException()
-        }
+        validateStudentExists(studentId)
 
         val lectureBasket = LectureBasket(
             studentId = studentId,
@@ -67,9 +63,7 @@ class LectureBasketService(
     }
 
     fun findLectureBasket(studentId: Long, lectureBasketId: Long): GetLectureBasketResponse {
-        if (!studentRepository.existsById(studentId)) {
-            throw StudentNotFoundException()
-        }
+        validateStudentExists(studentId)
 
         val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
             .orElseThrow { LectureBasketNotFoundException() }
@@ -100,5 +94,11 @@ class LectureBasketService(
         val times = lectureTimeRepository.findAllByLectureId(lectureId)
 
         return LectureInBasketDto.from(lecture, course, professor, times)
+    }
+
+    private fun validateStudentExists(studentId: Long) {
+        if (!studentRepository.existsById(studentId)) {
+            throw StudentNotFoundException()
+        }
     }
 }
