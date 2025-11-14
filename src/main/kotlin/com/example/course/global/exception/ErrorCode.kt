@@ -29,6 +29,7 @@ enum class ErrorCode(
     LECTURE_TIME_CONFLICT(HttpStatus.CONFLICT, "LB001", "기존 수강 바구니 내의 강의와 시간이 중복됩니다."),
     INVALID_LECTURE_BASKET_NAME_LENGTH(HttpStatus.BAD_REQUEST, "LB002", "수강 바구니 이름은 1글자 이상 20글자 이하여야 합니다."),
     LECTURE_BASKET_ACCESS_DENIED(HttpStatus.FORBIDDEN, "LB003", "해당 수강 바구니 접근 권한이 존재하지 않습니다."),
+    INVALID_LECTURE_SEMESTER_EXCEPTION(HttpStatus.BAD_REQUEST, "LB004", "수강 바구니와 연도 혹은 학기가 일치하지 않습니다."),
 
 
     // Lecture
