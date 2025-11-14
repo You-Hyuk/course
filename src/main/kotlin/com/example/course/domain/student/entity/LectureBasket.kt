@@ -74,6 +74,11 @@ class LectureBasket(
         return lectures.toList()
     }
 
+    fun rename(name: String) {
+        validateNameLength(name)
+        this.name = name
+    }
+
     private fun validateNameLength(name: String) {
         if (name.length !in 1..20) {
             throw InvalidLectureBasketNameLengthException()

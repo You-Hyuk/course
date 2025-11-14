@@ -2,6 +2,7 @@ package com.example.course.domain.student.controller
 
 import com.example.course.domain.student.dto.GetLectureBasketResponse
 import com.example.course.domain.student.dto.GetLectureBasketsResponse
+import com.example.course.domain.student.dto.PatchLectureBasketNameRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.service.LectureBasketService
@@ -9,6 +10,7 @@ import com.example.course.global.response.ApiResponse
 import com.example.course.global.util.ApiUtil
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -60,6 +62,16 @@ class LectureBasketController(
     ): ApiResponse<GetLectureBasketResponse> {
         val response = lectureBasketService.findDefaultLectureBasket(studentId)
         return ApiUtil.success(response)
+    }
+
+    @PatchMapping("/{lectureBasketId}/name")
+    fun updateLectureBasketName(
+        @PathVariable studentId: Long,
+        @PathVariable lectureBasketId: Long,
+        @RequestBody request: PatchLectureBasketNameRequest
+    ): ApiResponse<Void> {
+        lectureBasketService.modifyLectureBasketName(studentId, lectureBasketId, request)
+        return ApiUtil.successOnly()
     }
 
     @DeleteMapping("/{lectureBasketId}")

@@ -15,6 +15,7 @@ import com.example.course.domain.student.dto.GetLectureBasketResponse
 import com.example.course.domain.student.dto.GetLectureBasketsResponse
 import com.example.course.domain.student.dto.LectureBasketDto
 import com.example.course.domain.student.dto.LectureInBasketDto
+import com.example.course.domain.student.dto.PatchLectureBasketNameRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.entity.LectureBasket
@@ -131,9 +132,21 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lecture = lectureRepository.findById(lectureId)
-            .orElseThrow{ LectureNotFoundInBasketException() }
+            .orElseThrow { LectureNotFoundInBasketException() }
 
         lectureBasket.removeLecture(lecture)
+    }
+
+    @Transactional
+    fun modifyLectureBasketName(studentId: Long, lectureBasketId: Long, request: PatchLectureBasketNameRequest) {
+        validateStudentExists(studentId)
+
+        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
+            .orElseThrow { LectureBasketNotFoundException() }
+
+        validateLectureBasketAccess(lectureBasket, studentId)
+
+        lectureBasket.rename(request.lectureBasketName!!)
     }
 
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
