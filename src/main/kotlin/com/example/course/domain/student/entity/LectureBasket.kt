@@ -4,6 +4,7 @@ import com.example.course.domain.lecture.entity.Lecture
 import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.student.enums.Color
+import com.example.course.domain.student.enums.Status
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -33,6 +34,10 @@ class LectureBasket(
     @Enumerated(EnumType.STRING)
     @Column(name = "semester", nullable = false, updatable = false, columnDefinition = "varchar(20)")
     val semester: Semester,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, updatable = true, columnDefinition = "varchar(20)")
+    val status: Status,
 
     @Embedded
     val lectures: LectureBasketLectures = LectureBasketLectures()
