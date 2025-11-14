@@ -3,7 +3,7 @@ package com.example.course.domain.student.entity
 import com.example.course.domain.lecture.entity.Lecture
 import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.lecture.enums.Semester
-import jakarta.persistence.CascadeType
+import com.example.course.domain.student.enums.Color
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -40,4 +40,18 @@ class LectureBasket(
     @Embedded
     val lectures: LectureBasketLectures = LectureBasketLectures()
 
-)
+) {
+    fun addLecture(
+        lecture: Lecture,
+        loadTimes: (Long) -> List<LectureTime>
+    ) {
+        lectures.add(
+            LectureBasketLecture(
+                lectureBasket = this,
+                lectureId = lecture.id!!,
+                color = Color.COLOR_1
+            ),
+            loadTimes
+        )
+    }
+}

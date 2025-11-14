@@ -21,5 +21,16 @@ enum class ErrorCode(
     INVALID_STUDENT_PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "S002", "비밀번호는 8글자 이상 20글자 이하여야 합니다."),
     INVALID_STUDENT_NUMBER_FORMAT(HttpStatus.BAD_REQUEST, "S003", "학번의 앞 4글자는 2000 이상 2025 이하여야 합니다."),
     DUPLICATE_STUDENT_EXCEPTION(HttpStatus.CONFLICT, "S004", "동일한 학번의 계정이 존재합니다."),
-    INVALID_STUDENT_CREDENTIALS(HttpStatus.UNAUTHORIZED, "S005", "학생 인증 정보가 올바르지 않습니다.")
+    INVALID_STUDENT_CREDENTIALS(HttpStatus.UNAUTHORIZED, "S005", "학생 인증 정보가 올바르지 않습니다."),
+    STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "S006", "해당 학생이 존재하지 않습니다."),
+
+    // Lecture Basket
+    LECTURE_BASKET_NOT_FOUND(HttpStatus.NOT_FOUND, "LB000", "해당 수강 바구니가 존재하지 않습니다."),
+    LECTURE_TIME_CONFLICT(HttpStatus.CONFLICT, "LB001", "기존 수강 바구니 내의 강의와 시간이 중복됩니다."),
+
+    // Lecture
+    LECTURE_NOT_FOUND(HttpStatus.NOT_FOUND, "L000", "해당 강의가 존재하지 않습니다."),
+
+    // Lecture Basket Item
+    DUPLICATE_LECTURE_IN_BASKET(HttpStatus.BAD_REQUEST, "SBI000", "동일한 강의가 수강 바구니에 존재합니다.")
 }
