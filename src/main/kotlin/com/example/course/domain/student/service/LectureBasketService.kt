@@ -16,6 +16,7 @@ import com.example.course.domain.student.dto.GetLectureBasketsResponse
 import com.example.course.domain.student.dto.LectureBasketDto
 import com.example.course.domain.student.dto.LectureInBasketDto
 import com.example.course.domain.student.dto.PatchLectureBasketNameRequest
+import com.example.course.domain.student.dto.PatchLectureColorInBasketRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.entity.LectureBasket
@@ -169,6 +170,23 @@ class LectureBasketService(
         ).orElseThrow { LectureBasketNotFoundException() }
 
         lectureBasket.changeStatusToDefault(defaultLectureBasket)
+    }
+
+    @Transactional
+    fun modifyLectureColorInBasket(
+        studentId: Long,
+        lectureBasketId: Long,
+        lectureId: Long,
+        request: PatchLectureColorInBasketRequest
+    ) {
+        validateStudentExists(studentId)
+
+        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
+            .orElseThrow { LectureBasketNotFoundException() }
+
+        validateLectureBasketAccess(lectureBasket, studentId)
+
+        lectureBasket.changeColor(lectureId, request.color!!)
     }
 
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {

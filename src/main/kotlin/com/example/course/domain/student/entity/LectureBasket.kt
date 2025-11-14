@@ -70,6 +70,10 @@ class LectureBasket(
         lectures.remove(lecture)
     }
 
+    fun changeColor(lectureId: Long, color: Color) {
+        lectures.changeColor(lectureId, color)
+    }
+
     fun getLectures(): List<LectureBasketLecture> {
         return lectures.toList()
     }

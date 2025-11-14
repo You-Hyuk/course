@@ -30,4 +30,8 @@ class LectureBasketLecture(
     @Enumerated(EnumType.STRING)
     @Column(name = "color", nullable = false, updatable = true, columnDefinition = "varchar(20)")
     var color: Color
-)
+) {
+    fun changeColor(color: Color) {
+        this.color = color
+    }
+}

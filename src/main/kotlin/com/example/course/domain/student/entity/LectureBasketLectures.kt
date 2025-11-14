@@ -2,6 +2,7 @@ package com.example.course.domain.student.entity
 
 import com.example.course.domain.lecture.entity.Lecture
 import com.example.course.domain.lecture.entity.LectureTime
+import com.example.course.domain.student.enums.Color
 import com.example.course.domain.student.exception.DuplicateLectureInBasketException
 import com.example.course.domain.student.exception.LectureTimeConflictException
 import jakarta.persistence.CascadeType
@@ -31,6 +32,13 @@ class LectureBasketLectures(
             ?: throw LectureNotFoundInBasketException()
 
         lectures.remove(target)
+    }
+
+    fun changeColor(lectureId: Long, color: Color) {
+        val target = lectures.find { it.lectureId == lectureId }
+            ?: throw LectureNotFoundInBasketException()
+
+        target.changeColor(color)
     }
 
     fun toList(): List<LectureBasketLecture> {

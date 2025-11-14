@@ -5,6 +5,7 @@ import com.example.course.domain.student.dto.GetLectureBasketsResponse
 import com.example.course.domain.student.dto.PatchLectureBasketNameRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
+import com.example.course.domain.student.dto.PatchLectureColorInBasketRequest
 import com.example.course.domain.student.service.LectureBasketService
 import com.example.course.global.response.ApiResponse
 import com.example.course.global.util.ApiUtil
@@ -80,6 +81,22 @@ class LectureBasketController(
         @PathVariable lectureBasketId: Long
     ): ApiResponse<Void> {
         lectureBasketService.modifyDefaultLectureBasket(studentId, lectureBasketId)
+        return ApiUtil.successOnly()
+    }
+
+    @PatchMapping("/{lectureBasketId}/lectures/{lectureId}/color")
+    fun updateLectureBasketColor(
+        @PathVariable studentId: Long,
+        @PathVariable lectureBasketId: Long,
+        @PathVariable lectureId: Long,
+        @RequestBody request: PatchLectureColorInBasketRequest
+    ): ApiResponse<Void> {
+        lectureBasketService.modifyLectureColorInBasket(
+            studentId,
+            lectureBasketId,
+            lectureId,
+            request
+        )
         return ApiUtil.successOnly()
     }
 
