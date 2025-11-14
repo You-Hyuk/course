@@ -29,5 +29,5 @@ class LectureBasketLecture(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "color", nullable = false, updatable = true, columnDefinition = "varchar(20)")
-    val color: Color
+    var color: Color
 )

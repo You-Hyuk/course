@@ -28,7 +28,7 @@ class LectureBasket(
     val studentId: Long,
 
     @Column(name = "name", nullable = false, updatable = true)
-    val name: String,
+    var name: String,
 
     @Column(name = "lecture_basket_year", nullable = false, updatable = false)
     val year: Int,
@@ -39,7 +39,7 @@ class LectureBasket(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, updatable = true, columnDefinition = "varchar(20)")
-    val status: Status,
+    var status: Status,
 
     @Embedded
     val lectures: LectureBasketLectures = LectureBasketLectures()
