@@ -14,8 +14,8 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "lecture_basket_lectures")
-class LectureBasketLecture(
+@Table(name = "lecture_in_basket")
+class LectureInBasket(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     val id: Long? = null,

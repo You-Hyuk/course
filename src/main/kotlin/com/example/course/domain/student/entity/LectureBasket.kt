@@ -42,7 +42,7 @@ class LectureBasket(
     var status: Status,
 
     @Embedded
-    val lectures: LectureBasketLectures = LectureBasketLectures()
+    val lectures: LecturesInBasket = LecturesInBasket()
 
 ) {
 
@@ -57,7 +57,7 @@ class LectureBasket(
         validateLectureSemester(lecture)
 
         lectures.add(
-            LectureBasketLecture(
+            LectureInBasket(
                 lectureBasket = this,
                 lectureId = lecture.id!!,
                 color = Color.COLOR_1
@@ -74,7 +74,7 @@ class LectureBasket(
         lectures.changeColor(lectureId, color)
     }
 
-    fun getLectures(): List<LectureBasketLecture> {
+    fun getLectures(): List<LectureInBasket> {
         return lectures.toList()
     }
 

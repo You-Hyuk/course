@@ -12,14 +12,14 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.OneToMany
 
 @Embeddable
-class LectureBasketLectures(
+class LecturesInBasket(
 
     @OneToMany(mappedBy = "lectureBasket", cascade = [(CascadeType.ALL)], fetch = FetchType.LAZY, orphanRemoval = true)
-    private val lectures: MutableList<LectureBasketLecture> = mutableListOf()
+    private val lectures: MutableList<LectureInBasket> = mutableListOf()
 
 ) {
     fun add(
-        newLecture: LectureBasketLecture,
+        newLecture: LectureInBasket,
         loadTimes: (Long) -> List<LectureTime>
     ) {
         validateDuplicate(newLecture.lectureId)
@@ -42,7 +42,7 @@ class LectureBasketLectures(
         target.changeColor(color)
     }
 
-    fun toList(): List<LectureBasketLecture> {
+    fun toList(): List<LectureInBasket> {
         return lectures.toList()
     }
 
