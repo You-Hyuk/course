@@ -33,5 +33,11 @@ enum class ErrorCode(
     LECTURE_NOT_FOUND(HttpStatus.NOT_FOUND, "L000", "해당 강의가 존재하지 않습니다."),
 
     // Lecture Basket Item
-    DUPLICATE_LECTURE_IN_BASKET(HttpStatus.BAD_REQUEST, "SBI000", "동일한 강의가 수강 바구니에 존재합니다.")
+    DUPLICATE_LECTURE_IN_BASKET(HttpStatus.BAD_REQUEST, "SBI000", "동일한 강의가 수강 바구니에 존재합니다."),
+
+    // Professor
+    PROFESSOR_NOT_FOUND(HttpStatus.NOT_FOUND, "P000", "해당 교수가 존재하지 않습니다."),
+
+    // Course
+    COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "C000", "해당 과목이 존재하지 않습니다.")
 }

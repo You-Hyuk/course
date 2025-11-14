@@ -25,6 +25,10 @@ class LectureBasketLectures(
         lectures.add(newLecture)
     }
 
+    fun toList(): List<LectureBasketLecture> {
+        return lectures.toList()
+    }
+
     private fun validateDuplicate(lectureId: Long) {
         if (lectures.any { it.lectureId == lectureId })
             throw DuplicateLectureInBasketException()

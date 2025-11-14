@@ -63,6 +63,10 @@ class LectureBasket(
         )
     }
 
+    fun getLectures(): List<LectureBasketLecture> {
+        return lectures.toList()
+    }
+
     private fun validateNameLength(name: String) {
         if (name.length !in 1..20) {
             throw InvalidLectureBasketNameLengthException()
