@@ -24,6 +24,7 @@ interface LectureTimeRepository : JpaRepository<LectureTime, Long> {
         @Param("timeSlots") timeSlots: List<TimeSlot>
     ): List<Long>
 
-
     fun findAllByLectureIdIn(lectureIds: List<Long>): List<LectureTime>
+
+    fun findAllByLectureId(lectureId: Long): List<LectureTime>
 }
