@@ -109,7 +109,8 @@ class LectureBasketService(
         validateStudentExists(studentId)
         val (year, semester) = SemesterResolver.resolve(now = LocalDate.now())
 
-        val lectureBasket = lectureBasketRepository.findLectureBasketByYearAndSemesterAndStatus(
+        val lectureBasket = lectureBasketRepository.findLectureBasketByStudentIdAndYearAndSemesterAndStatus(
+            studentId = studentId,
             year = year,
             semester = semester,
             status = Status.DEFAULT
@@ -158,7 +159,14 @@ class LectureBasketService(
 
         validateLectureBasketAccess(lectureBasket, studentId)
 
-        val defaultLectureBasket = lectureBasketRepository.findByStudentIdAndStatus(studentId, Status.DEFAULT)
+        val (year, semester) = SemesterResolver.resolve(now = LocalDate.now())
+
+        val defaultLectureBasket = lectureBasketRepository.findLectureBasketByStudentIdAndYearAndSemesterAndStatus(
+            studentId,
+            year,
+            semester,
+            Status.DEFAULT
+        ).orElseThrow { LectureBasketNotFoundException() }
 
         lectureBasket.changeStatusToDefault(defaultLectureBasket)
     }
