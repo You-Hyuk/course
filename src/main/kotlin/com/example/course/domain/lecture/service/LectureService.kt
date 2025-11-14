@@ -14,10 +14,12 @@ import com.example.course.domain.lecture.enums.CourseType
 import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.lecture.enums.TimeSlot
 import com.example.course.domain.student.dao.DepartmentRepository
+import com.example.course.domain.student.util.SemesterResolver
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 class LectureService(
@@ -41,12 +43,15 @@ class LectureService(
         size: Int
     ): GetLectureResponse {
         val pageable: Pageable = PageRequest.of(page - 1, size)
+
+        val (resolvedYear, resolvedSemester) = resolveYearAndSemester(year, semester)
+
         val lectureSlice = findLectureSlice(
             name,
             professorName,
             timeSlots,
-            semester,
-            year,
+            resolvedSemester,
+            resolvedYear,
             courseType,
             departmentName,
             grade,
@@ -147,5 +152,18 @@ class LectureService(
             val times = lectureTimeMap[lecture.id]!!
             LectureDto.from(lecture, course, professor, times)
         }
+    }
+
+    private fun resolveYearAndSemester(
+        year: Int?,
+        semester: Semester?
+    ): Pair<Int, Semester> {
+
+        val (defaultYear, defaultSemester) = SemesterResolver.resolve(LocalDate.now())
+
+        val resolvedYear = year ?: defaultYear
+        val resolvedSemester = semester ?: defaultSemester
+
+        return resolvedYear to resolvedSemester
     }
 }
