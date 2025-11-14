@@ -11,7 +11,8 @@ interface LectureBasketRepository : JpaRepository<LectureBasket, Long> {
 
     fun findLectureBasketsByStudentId(studentId: Long): List<LectureBasket>
 
-    fun findLectureBasketByYearAndSemesterAndStatus(
+    fun findLectureBasketByStudentIdAndYearAndSemesterAndStatus(
+        studentId: Long,
         year: Int,
         semester: Semester,
         status: Status
