@@ -4,6 +4,7 @@ import com.example.course.domain.lecture.entity.Lecture
 import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.student.enums.Color
 import com.example.course.domain.student.exception.DuplicateLectureInBasketException
+import com.example.course.domain.student.exception.LectureNotFoundInBasketException
 import com.example.course.domain.student.exception.LectureTimeConflictException
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Embeddable

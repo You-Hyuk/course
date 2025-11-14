@@ -20,7 +20,7 @@ import com.example.course.domain.student.dto.PatchLectureColorInBasketRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.entity.LectureBasket
-import com.example.course.domain.student.entity.LectureNotFoundInBasketException
+import com.example.course.domain.student.exception.LectureNotFoundInBasketException
 import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.LectureBasketAccessDeniedException
 import com.example.course.domain.student.exception.LectureBasketNotFoundException
