@@ -16,5 +16,8 @@ data class GetLectureBasketResponse(
                 lectures = lecture
             )
         }
+
+        fun empty(year: Int, semester: Semester) =
+            GetLectureBasketResponse(year, semester, emptyList())
     }
 }

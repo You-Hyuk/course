@@ -22,8 +22,10 @@ import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.LectureBasketAccessDeniedException
 import com.example.course.domain.student.exception.LectureBasketNotFoundException
 import com.example.course.domain.student.exception.StudentNotFoundException
+import com.example.course.domain.student.util.SemesterResolver
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 class LectureBasketService(
@@ -99,6 +101,23 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         lectureBasketRepository.delete(lectureBasket)
+    }
+
+    fun findDefaultLectureBasket(studentId: Long): GetLectureBasketResponse {
+        validateStudentExists(studentId)
+        val (year, semester) = SemesterResolver.resolve(now = LocalDate.now())
+
+        val lectureBasket = lectureBasketRepository.findLectureBasketByYearAndSemesterAndStatus(
+            year = year,
+            semester = semester,
+            status = Status.DEFAULT
+        ).orElse(null)
+            ?: return GetLectureBasketResponse.empty(year, semester)
+
+        val lectureDtos = lectureBasket.getLectures()
+            .map { buildLectureInBasketDto(it.lectureId) }
+
+        return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
     }
 
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {

@@ -54,6 +54,14 @@ class LectureBasketController(
         return ApiUtil.success(response)
     }
 
+    @GetMapping("/default")
+    fun readDefaultLectureBasket(
+        @PathVariable studentId: Long
+    ): ApiResponse<GetLectureBasketResponse> {
+        val response = lectureBasketService.findDefaultLectureBasket(studentId)
+        return ApiUtil.success(response)
+    }
+
     @DeleteMapping("/{lectureBasketId}")
     fun removeLectureBasket(
         @PathVariable studentId: Long,
