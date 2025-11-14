@@ -12,6 +12,8 @@ import com.example.course.domain.student.dao.LectureBasketLectureRepository
 import com.example.course.domain.student.dao.LectureBasketRepository
 import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.GetLectureBasketResponse
+import com.example.course.domain.student.dto.GetLectureBasketsResponse
+import com.example.course.domain.student.dto.LectureBasketDto
 import com.example.course.domain.student.dto.LectureInBasketDto
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
@@ -74,6 +76,18 @@ class LectureBasketService(
         return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
     }
 
+    fun findLectureBaskets(studentId: Long): List<GetLectureBasketsResponse> {
+        validateStudentExists(studentId)
+
+        val lectureBaskets = lectureBasketRepository.findLectureBasketsByStudentId(studentId)
+
+        return groupByYearAndSemester(lectureBaskets)
+            .sortedWith(
+                compareByDescending<GetLectureBasketsResponse> { it.year }
+                    .thenBy { it.semester.order }
+            )
+    }
+
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
         if (lectureBasketRepository.existsByYearAndSemester(year, semester)) {
             return Status.NORMAL
@@ -100,5 +114,20 @@ class LectureBasketService(
         if (!studentRepository.existsById(studentId)) {
             throw StudentNotFoundException()
         }
+    }
+
+    private fun groupByYearAndSemester(
+        baskets: List<LectureBasket>
+    ): List<GetLectureBasketsResponse> {
+        return baskets
+            .groupBy { it.year to it.semester }
+            .map { (key, group) ->
+                val (year, semester) = key
+                GetLectureBasketsResponse.from(
+                    year = year,
+                    semester = semester,
+                    lectureBaskets = group.map { LectureBasketDto.from(it) }
+                )
+            }
     }
 }

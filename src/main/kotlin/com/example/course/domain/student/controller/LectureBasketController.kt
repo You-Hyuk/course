@@ -1,6 +1,7 @@
 package com.example.course.domain.student.controller
 
 import com.example.course.domain.student.dto.GetLectureBasketResponse
+import com.example.course.domain.student.dto.GetLectureBasketsResponse
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.service.LectureBasketService
@@ -43,6 +44,12 @@ class LectureBasketController(
         @PathVariable lectureBasketId: Long
     ): ApiResponse<GetLectureBasketResponse> {
         val response = lectureBasketService.findLectureBasket(studentId, lectureBasketId)
+        return ApiUtil.success(response)
+    }
+
+    @GetMapping
+    fun readLectureBaskets(@PathVariable studentId: Long): ApiResponse<List<GetLectureBasketsResponse>> {
+        val response = lectureBasketService.findLectureBaskets(studentId)
         return ApiUtil.success(response)
     }
 }
