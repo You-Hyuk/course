@@ -5,6 +5,7 @@ import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.student.enums.Color
 import com.example.course.domain.student.enums.Status
+import com.example.course.domain.student.exception.InvalidLectureBasketNameLengthException
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -43,6 +44,11 @@ class LectureBasket(
     val lectures: LectureBasketLectures = LectureBasketLectures()
 
 ) {
+
+    init {
+        validateNameLength(name)
+    }
+
     fun addLecture(
         lecture: Lecture,
         loadTimes: (Long) -> List<LectureTime>
@@ -55,5 +61,11 @@ class LectureBasket(
             ),
             loadTimes
         )
+    }
+
+    private fun validateNameLength(name: String) {
+        if (name.length !in 1..20) {
+            throw InvalidLectureBasketNameLengthException()
+        }
     }
 }

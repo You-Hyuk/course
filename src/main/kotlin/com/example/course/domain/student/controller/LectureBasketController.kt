@@ -1,6 +1,7 @@
 package com.example.course.domain.student.controller
 
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
+import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.service.LectureBasketService
 import com.example.course.global.response.ApiResponse
 import com.example.course.global.util.ApiUtil
@@ -22,6 +23,15 @@ class LectureBasketController(
         @RequestBody request: PostAddLectureToBasketRequest
     ): ApiResponse<Void> {
         lectureBasketService.addLectureToBasket(studentId, lectureBasketId, request)
+        return ApiUtil.successOnly()
+    }
+
+    @PostMapping
+    fun generateLectureBasket(
+        @PathVariable studentId: Long,
+        @RequestBody request: PostLectureBasketRequest
+    ): ApiResponse<Void> {
+        lectureBasketService.generateLectureBasket(studentId, request)
         return ApiUtil.successOnly()
     }
 }
