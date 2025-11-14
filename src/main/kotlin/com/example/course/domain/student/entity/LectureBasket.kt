@@ -1,7 +1,11 @@
 package com.example.course.domain.student.entity
 
+import com.example.course.domain.lecture.entity.Lecture
+import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.lecture.enums.Semester
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -9,7 +13,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import jakarta.persistence.Transient
 
 @Entity
 @Table(name = "lecture_baskets")
@@ -34,6 +37,7 @@ class LectureBasket(
     @Column(name = "semester", nullable = false, updatable = false, columnDefinition = "varchar(20)")
     val semester: Semester,
 
-    @Transient
-    private val lectureBasketLectures: LectureBasketLectures = LectureBasketLectures()
+    @Embedded
+    val lectures: LectureBasketLectures = LectureBasketLectures()
+
 )
