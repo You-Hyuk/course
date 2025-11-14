@@ -18,6 +18,7 @@ import com.example.course.domain.student.dto.LectureInBasketDto
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.entity.LectureBasket
+import com.example.course.domain.student.entity.LectureNotFoundInBasketException
 import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.LectureBasketAccessDeniedException
 import com.example.course.domain.student.exception.LectureBasketNotFoundException
@@ -118,6 +119,21 @@ class LectureBasketService(
             .map { buildLectureInBasketDto(it.lectureId) }
 
         return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
+    }
+
+    @Transactional
+    fun deleteLectureInBasket(studentId: Long, lectureBasketId: Long, lectureId: Long) {
+        validateStudentExists(studentId)
+
+        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
+            .orElseThrow { LectureBasketNotFoundException() }
+
+        validateLectureBasketAccess(lectureBasket, studentId)
+
+        val lecture = lectureRepository.findById(lectureId)
+            .orElseThrow{ LectureNotFoundInBasketException() }
+
+        lectureBasket.removeLecture(lecture)
     }
 
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {

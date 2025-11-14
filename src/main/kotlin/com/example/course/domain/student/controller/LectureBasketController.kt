@@ -70,4 +70,14 @@ class LectureBasketController(
         lectureBasketService.deleteLectureBasket(studentId, lectureBasketId)
         return ApiUtil.successOnly()
     }
+
+    @DeleteMapping("/{lectureBasketId}/lectures/{lectureId}")
+    fun removeLectureInBasket(
+        @PathVariable studentId: Long,
+        @PathVariable lectureBasketId: Long,
+        @PathVariable lectureId: Long
+    ): ApiResponse<Void> {
+        lectureBasketService.deleteLectureInBasket(studentId, lectureBasketId, lectureId)
+        return ApiUtil.successOnly()
+    }
 }

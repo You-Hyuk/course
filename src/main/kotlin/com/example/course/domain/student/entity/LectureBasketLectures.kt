@@ -1,5 +1,6 @@
 package com.example.course.domain.student.entity
 
+import com.example.course.domain.lecture.entity.Lecture
 import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.student.exception.DuplicateLectureInBasketException
 import com.example.course.domain.student.exception.LectureTimeConflictException
@@ -23,6 +24,13 @@ class LectureBasketLectures(
         validateTimeConflict(newLecture.lectureId, loadTimes)
 
         lectures.add(newLecture)
+    }
+
+    fun remove(lecture: Lecture) {
+        val target = lectures.find { it.lectureId == lecture.id }
+            ?: throw LectureNotFoundInBasketException()
+
+        lectures.remove(target)
     }
 
     fun toList(): List<LectureBasketLecture> {

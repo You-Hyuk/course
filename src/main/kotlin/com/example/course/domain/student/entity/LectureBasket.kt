@@ -66,6 +66,10 @@ class LectureBasket(
         )
     }
 
+    fun removeLecture(lecture: Lecture) {
+        lectures.remove(lecture)
+    }
+
     fun getLectures(): List<LectureBasketLecture> {
         return lectures.toList()
     }
