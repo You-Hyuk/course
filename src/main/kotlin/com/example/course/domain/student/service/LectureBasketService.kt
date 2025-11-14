@@ -7,8 +7,6 @@ import com.example.course.domain.student.dao.LectureBasketLectureRepository
 import com.example.course.domain.student.dao.LectureBasketRepository
 import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
-import com.example.course.domain.student.entity.LectureBasketLecture
-import com.example.course.domain.student.enums.Color
 import com.example.course.domain.student.exception.LectureBasketNotFoundException
 import com.example.course.domain.student.exception.StudentNotFoundException
 import jakarta.transaction.Transactional

@@ -27,9 +27,6 @@ class LectureBasket(
     @Column(name = "name", nullable = false, updatable = true)
     val name: String,
 
-    @Column(name = "number", nullable = false, updatable = false)
-    val number: Int,
-
     @Column(name = "lecture_basket_year", nullable = false, updatable = false)
     val year: Int,
 
