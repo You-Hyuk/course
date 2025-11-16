@@ -4,6 +4,7 @@ import com.example.course.domain.lecture.entity.Lecture
 import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.lecture.enums.TimeSlot
+import com.example.course.domain.lecture.exception.LectureCapacityExceededException
 import com.example.course.domain.student.enums.Color
 import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.DuplicateLectureInBasketException
@@ -69,9 +70,10 @@ class LectureBasketTest {
         val lectures = lectureBasket.getLectures()
 
         // then
-        assertEquals(1, lectures.size)
-        assertEquals(lecture.id, lectures[0].lectureId)
-        assertEquals(lectures[0].color, Color.COLOR_1)
+        assertEquals(lectures.size, 1)
+        assertEquals(lectures[0].lectureId, lecture.id)
+        assertEquals(Color.COLOR_1, lectures[0].color)
+        assertEquals(1, lecture.currentEnrollment)
     }
 
     @Test
@@ -111,6 +113,7 @@ class LectureBasketTest {
         // then
         val lectures = lectureBasket.getLectures()
         assertEquals(0, lectures.size)
+        assertEquals(0, lecture.currentEnrollment)
     }
 
     @Test
@@ -425,4 +428,39 @@ class LectureBasketTest {
         }
     }
 
+    @Test
+    fun 수강_바구니에_강의를_신청할_때_강의_최대_수강_인원을_초과한_경우_예외_발생() {
+        //given
+        val lectureBasket = LectureBasket(
+            id = 1,
+            name = "name",
+            studentId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            status = Status.DEFAULT
+        )
+        val lecture = Lecture(
+            id = 1,
+            courseId = 1,
+            professorId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            capacity = 30,
+            currentEnrollment = 30,
+            code = "10001"
+        )
+        val loadTimes: (Long) -> List<LectureTime> = { lectureId ->
+            listOf(
+                LectureTime(
+                    lectureId = lectureId,
+                    timeSlot = TimeSlot.MON_P1
+                )
+            )
+        }
+
+        //when & then
+        assertThrows<LectureCapacityExceededException> {
+            lectureBasket.addLecture(lecture, loadTimes)
+        }
+    }
 }
