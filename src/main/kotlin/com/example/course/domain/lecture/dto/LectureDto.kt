@@ -6,12 +6,13 @@ import com.example.course.domain.lecture.entity.LectureTime
 import com.example.course.domain.lecture.entity.Professor
 import com.example.course.domain.lecture.enums.CourseType
 import com.example.course.domain.lecture.enums.TimeSlot
+import com.example.course.domain.lecture.util.toMergedTimeRanges
 
 data class LectureDto(
     val lectureId: Long,
     val courseName: String,
     val professorName: String,
-    val timeSlots: List<TimeSlot>,
+    val lectureTimes: List<String>,
     val courseGrade: Int,
     val courseType: CourseType,
     val courseCredit: Int,
@@ -24,13 +25,13 @@ data class LectureDto(
             lecture: Lecture,
             course: Course,
             professor: Professor,
-            lectureTimes: List<LectureTime>
+            lectureTimes: List<String>
         ): LectureDto {
             return LectureDto(
                 lectureId = lecture.id!!,
                 courseName = course.name,
                 professorName = professor.name,
-                timeSlots = lectureTimes.map { it.timeSlot }.sortedBy { it.ordinal },
+                lectureTimes = lectureTimes,
                 courseGrade = course.grade,
                 courseType = course.type,
                 courseCredit = course.credit,
