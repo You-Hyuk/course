@@ -256,8 +256,9 @@ class LectureBasketService(
         val professor = findProfessor(lecture)
 
         val times = lectureTimeRepository.findAllByLectureId(lectureId)
+        val timeSlots = times.map { it.timeSlot }
 
-        return LectureInBasketDto.from(lecture, course, professor, times)
+        return LectureInBasketDto.from(lecture, course, professor, timeSlots.toMergedTimeRanges())
     }
 
     private fun findProfessor(lecture: Lecture): Professor {

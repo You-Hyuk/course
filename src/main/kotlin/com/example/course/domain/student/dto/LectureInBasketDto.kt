@@ -10,20 +10,20 @@ data class LectureInBasketDto(
     val lectureId: Long,
     val courseName: String,
     val professorName: String,
-    val timeSlots: List<TimeSlot>
+    val lectureTimes: List<String>
 ) {
     companion object {
         fun from(
             lecture: Lecture,
             course: Course,
             professor: Professor,
-            lectureTimes: List<LectureTime>
+            lectureTimes: List<String>
         ): LectureInBasketDto {
             return LectureInBasketDto(
                 lectureId = lecture.id!!,
                 courseName = course.name,
                 professorName = professor.name,
-                timeSlots = lectureTimes.map { it.timeSlot }
+                lectureTimes = lectureTimes
             )
         }
     }
