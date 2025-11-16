@@ -27,7 +27,7 @@ class LectureRepositoryTest (
                 courseId = 1,
                 professorId = 1,
                 year = 2025,
-                semester = Semester.SPRING,
+                semester = Semester.SECOND,
                 capacity = 30,
                 currentEnrollment = 0,
                 code = "10001"
@@ -59,7 +59,7 @@ class LectureRepositoryTest (
                 courseId = 1,
                 professorId = 1,
                 year = 2025,
-                semester = Semester.SPRING,
+                semester = Semester.SECOND,
                 capacity = 30,
                 currentEnrollment = 0,
                 code = "10001"
@@ -91,7 +91,7 @@ class LectureRepositoryTest (
                 courseId = 1,
                 professorId = 1,
                 year = 2025,
-                semester = Semester.SPRING,
+                semester = Semester.SECOND,
                 capacity = 30,
                 currentEnrollment = 0,
                 code = "10001"
@@ -105,7 +105,7 @@ class LectureRepositoryTest (
         val result = lectureRepository.findFilteredLectures(
             null,
             null,
-            Semester.SPRING,
+            Semester.SECOND,
             null,
             null,
             PageRequest.of(0, 20)
@@ -123,7 +123,7 @@ class LectureRepositoryTest (
                 courseId = 1,
                 professorId = 1,
                 year = 2025,
-                semester = Semester.SPRING,
+                semester = Semester.SECOND,
                 capacity = 30,
                 currentEnrollment = 0,
                 code = "10001"
@@ -155,7 +155,7 @@ class LectureRepositoryTest (
                 courseId = 1,
                 professorId = 1,
                 year = 2025,
-                semester = Semester.SPRING,
+                semester = Semester.SECOND,
                 capacity = 30,
                 currentEnrollment = 0,
                 code = "10001"
