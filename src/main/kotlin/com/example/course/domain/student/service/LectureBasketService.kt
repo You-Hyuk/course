@@ -111,6 +111,7 @@ class LectureBasketService(
 
         validateLectureBasketAccess(lectureBasket, studentId)
 
+        lectureBasket.validateDeletable()
         lectureBasketRepository.delete(lectureBasket)
     }
 
