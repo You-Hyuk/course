@@ -13,6 +13,7 @@ import com.example.course.domain.lecture.entity.Professor
 import com.example.course.domain.lecture.enums.CourseType
 import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.lecture.enums.TimeSlot
+import com.example.course.domain.lecture.util.toMergedTimeRanges
 import com.example.course.domain.student.dao.DepartmentRepository
 import com.example.course.domain.student.util.SemesterResolver
 import org.springframework.data.domain.PageRequest
@@ -150,7 +151,8 @@ class LectureService(
             val course = courseMap[lecture.courseId]!!
             val professor = professorMap[lecture.professorId]!!
             val times = lectureTimeMap[lecture.id]!!
-            LectureDto.from(lecture, course, professor, times)
+            val lectureTimes = times.map { it.timeSlot }.toMergedTimeRanges()
+            LectureDto.from(lecture, course, professor, lectureTimes)
         }
     }
 
