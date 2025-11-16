@@ -4,14 +4,22 @@ import com.example.course.domain.lecture.dao.CourseRepository
 import com.example.course.domain.lecture.dao.LectureRepository
 import com.example.course.domain.lecture.dao.LectureTimeRepository
 import com.example.course.domain.lecture.dao.ProfessorRepository
+import com.example.course.domain.lecture.entity.Course
+import com.example.course.domain.lecture.entity.Lecture
+import com.example.course.domain.lecture.entity.LectureTime
+import com.example.course.domain.lecture.entity.Professor
 import com.example.course.domain.lecture.enums.Semester
+import com.example.course.domain.lecture.enums.TimeSlot
 import com.example.course.domain.lecture.exception.CourseNotFoundException
 import com.example.course.domain.lecture.exception.LectureNotFoundException
 import com.example.course.domain.lecture.exception.ProfessorNotFoundException
+import com.example.course.domain.lecture.util.toMergedTimeRanges
 import com.example.course.domain.student.dao.LectureBasketRepository
+import com.example.course.domain.student.dao.LectureInBasketRepository
 import com.example.course.domain.student.dao.StudentRepository
 import com.example.course.domain.student.dto.GetLectureBasketResponse
 import com.example.course.domain.student.dto.GetLectureBasketsResponse
+import com.example.course.domain.student.dto.GetLectureInBasketResponse
 import com.example.course.domain.student.dto.LectureBasketDto
 import com.example.course.domain.student.dto.LectureInBasketDto
 import com.example.course.domain.student.dto.PatchLectureBasketNameRequest
@@ -19,10 +27,12 @@ import com.example.course.domain.student.dto.PatchLectureColorInBasketRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
 import com.example.course.domain.student.entity.LectureBasket
+import com.example.course.domain.student.entity.LectureInBasket
 import com.example.course.domain.student.exception.LectureNotFoundInBasketException
 import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.LectureBasketAccessDeniedException
 import com.example.course.domain.student.exception.LectureBasketNotFoundException
+import com.example.course.domain.student.exception.LectureInBasketNotFoundException
 import com.example.course.domain.student.exception.StudentNotFoundException
 import com.example.course.domain.student.util.SemesterResolver
 import jakarta.transaction.Transactional
@@ -36,19 +46,21 @@ class LectureBasketService(
     val studentRepository: StudentRepository,
     val lectureRepository: LectureRepository,
     val professorRepository: ProfessorRepository,
-    val courseRepository: CourseRepository
+    val courseRepository: CourseRepository,
+    val lectureInBasketRepository: LectureInBasketRepository
 ) {
     @Transactional
     fun addLectureToBasket(studentId: Long, lectureBasketId: Long, request: PostAddLectureToBasketRequest) {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
+        val lectureBasket = findLectureBasket(lectureBasketId)
 
         val lecture = lectureRepository.findById(request.lectureId!!)
             .orElseThrow { LectureNotFoundException() }
 
-        lectureBasket.addLecture(lecture) { lectureTimeRepository.findAllByLectureId(lecture.id!!) }
+        lectureBasket.addLecture(lecture) { id ->
+            lectureTimeRepository.findAllByLectureId(id)
+        }
 
         lectureBasketRepository.save(lectureBasket)
     }
@@ -71,8 +83,7 @@ class LectureBasketService(
     fun findLectureBasket(studentId: Long, lectureBasketId: Long): GetLectureBasketResponse {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
+        val lectureBasket = findLectureBasket(lectureBasketId)
 
         val lectureDtos = lectureBasket.getLectures()
             .map { buildLectureInBasketDto(it.lectureId) }
@@ -96,11 +107,11 @@ class LectureBasketService(
     fun deleteLectureBasket(studentId: Long, lectureBasketId: Long) {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
+        val lectureBasket = findLectureBasket(lectureBasketId)
 
         validateLectureBasketAccess(lectureBasket, studentId)
 
+        lectureBasket.validateDeletable()
         lectureBasketRepository.delete(lectureBasket)
     }
 
@@ -123,16 +134,15 @@ class LectureBasketService(
     }
 
     @Transactional
-    fun deleteLectureInBasket(studentId: Long, lectureBasketId: Long, lectureId: Long) {
+    fun deleteLectureInBasket(studentId: Long, lectureBasketId: Long, lectureInBasketId: Long) {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
+        val lectureBasket = findLectureBasket(lectureBasketId)
 
         validateLectureBasketAccess(lectureBasket, studentId)
 
-        val lecture = lectureRepository.findById(lectureId)
-            .orElseThrow { LectureNotFoundInBasketException() }
+        val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        val lecture = findLecture(lectureInBasket.lectureId)
 
         lectureBasket.removeLecture(lecture)
     }
@@ -141,8 +151,7 @@ class LectureBasketService(
     fun modifyLectureBasketName(studentId: Long, lectureBasketId: Long, request: PatchLectureBasketNameRequest) {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
+        val lectureBasket = findLectureBasket(lectureBasketId)
 
         validateLectureBasketAccess(lectureBasket, studentId)
 
@@ -153,8 +162,7 @@ class LectureBasketService(
     fun modifyDefaultLectureBasket(studentId: Long, lectureBasketId: Long) {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
+        val lectureBasket = findLectureBasket(lectureBasketId)
 
         validateLectureBasketAccess(lectureBasket, studentId)
 
@@ -174,17 +182,62 @@ class LectureBasketService(
     fun modifyLectureColorInBasket(
         studentId: Long,
         lectureBasketId: Long,
-        lectureId: Long,
+        lectureInBasketId: Long,
         request: PatchLectureColorInBasketRequest
     ) {
         validateStudentExists(studentId)
 
-        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
-            .orElseThrow { LectureBasketNotFoundException() }
-
+        val lectureBasket = findLectureBasket(lectureBasketId)
         validateLectureBasketAccess(lectureBasket, studentId)
 
-        lectureBasket.changeColor(lectureId, request.color!!)
+        val lectureInBasket = findLectureInBasket(lectureInBasketId)
+
+        lectureBasket.changeColor(lectureInBasket.lectureId, request.color!!)
+    }
+
+    fun findLectureInBasket(
+        studentId: Long,
+        lectureBasketId: Long,
+        lectureInBasketId: Long
+    ): GetLectureInBasketResponse {
+        validateStudentExists(studentId)
+
+        val lectureBasket = findLectureBasket(lectureBasketId)
+        validateLectureBasketAccess(lectureBasket, studentId)
+
+        val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        val lecture = findLectureByLectureInBasket(lectureInBasket)
+        val course = findCourse(lecture)
+        val professor = findProfessor(lecture)
+
+        val lectureTimes: List<LectureTime> = lectureTimeRepository.findAllByLectureId(lecture.id!!)
+        val timeSlots: List<TimeSlot> = lectureTimes.map { it.timeSlot }
+
+        return GetLectureInBasketResponse.from(
+            lectureInBasket,
+            professor,
+            lecture,
+            course,
+            timeSlots.toMergedTimeRanges()
+        )
+    }
+
+    private fun findLectureByLectureInBasket(lectureInBasket: LectureInBasket): Lecture {
+        val lecture = lectureRepository.findById(lectureInBasket.lectureId)
+            .orElseThrow { LectureNotFoundInBasketException() }
+        return lecture
+    }
+
+    private fun findLectureInBasket(lectureInBasketId: Long): LectureInBasket {
+        val lectureInBasket = lectureInBasketRepository.findById(lectureInBasketId)
+            .orElseThrow { LectureInBasketNotFoundException() }
+        return lectureInBasket
+    }
+
+    private fun findLectureBasket(lectureBasketId: Long): LectureBasket {
+        val lectureBasket = lectureBasketRepository.findById(lectureBasketId)
+            .orElseThrow { LectureBasketNotFoundException() }
+        return lectureBasket
     }
 
     private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
@@ -198,15 +251,32 @@ class LectureBasketService(
         val lecture = lectureRepository.findById(lectureId)
             .orElseThrow { LectureNotFoundException() }
 
-        val course = courseRepository.findById(lecture.courseId)
-            .orElseThrow { CourseNotFoundException() }
+        val course = findCourse(lecture)
 
-        val professor = professorRepository.findById(lecture.professorId)
-            .orElseThrow { ProfessorNotFoundException() }
+        val professor = findProfessor(lecture)
 
         val times = lectureTimeRepository.findAllByLectureId(lectureId)
+        val timeSlots = times.map { it.timeSlot }
 
-        return LectureInBasketDto.from(lecture, course, professor, times)
+        return LectureInBasketDto.from(lecture, course, professor, timeSlots.toMergedTimeRanges())
+    }
+
+    private fun findProfessor(lecture: Lecture): Professor {
+        val professor = professorRepository.findById(lecture.professorId)
+            .orElseThrow { ProfessorNotFoundException() }
+        return professor
+    }
+
+    private fun findCourse(lecture: Lecture): Course {
+        val course = courseRepository.findById(lecture.courseId)
+            .orElseThrow { CourseNotFoundException() }
+        return course
+    }
+
+    private fun findLecture(lectureInBasketId: Long): Lecture {
+        val lecture = lectureRepository.findById(lectureInBasketId)
+            .orElseThrow { LectureNotFoundInBasketException() }
+        return lecture
     }
 
     private fun validateStudentExists(studentId: Long) {

@@ -10,6 +10,7 @@ import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.DuplicateLectureInBasketException
 import com.example.course.domain.student.exception.InvalidLectureBasketNameLengthException
 import com.example.course.domain.student.exception.InvalidLectureSemesterException
+import com.example.course.domain.student.exception.LectureBasketDeletionDeniedException
 import com.example.course.domain.student.exception.LectureNotFoundInBasketException
 import com.example.course.domain.student.exception.LectureTimeConflictException
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -461,6 +462,24 @@ class LectureBasketTest {
         //when & then
         assertThrows<LectureCapacityExceededException> {
             lectureBasket.addLecture(lecture, loadTimes)
+        }
+    }
+
+    @Test
+    fun 대표_수강_바구니를_제거하는_경우_예외_발생() {
+        //given
+        val lectureBasket = LectureBasket(
+            id = 1,
+            name = "name",
+            studentId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            status = Status.DEFAULT
+        )
+
+        // when & then
+        assertThrows<LectureBasketDeletionDeniedException>{
+            lectureBasket.validateDeletable()
         }
     }
 }

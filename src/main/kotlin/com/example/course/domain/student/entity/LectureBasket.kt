@@ -7,6 +7,7 @@ import com.example.course.domain.student.enums.Color
 import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.InvalidLectureBasketNameLengthException
 import com.example.course.domain.student.exception.InvalidLectureSemesterException
+import com.example.course.domain.student.exception.LectureBasketDeletionDeniedException
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -74,6 +75,12 @@ class LectureBasket(
 
     fun changeColor(lectureId: Long, color: Color) {
         lectures.changeColor(lectureId, color)
+    }
+
+    fun validateDeletable() {
+        if (this.status == Status.DEFAULT) {
+            throw LectureBasketDeletionDeniedException()
+        }
     }
 
     fun getLectures(): List<LectureInBasket> {

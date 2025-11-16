@@ -2,6 +2,7 @@ package com.example.course.domain.student.controller
 
 import com.example.course.domain.student.dto.GetLectureBasketResponse
 import com.example.course.domain.student.dto.GetLectureBasketsResponse
+import com.example.course.domain.student.dto.GetLectureInBasketResponse
 import com.example.course.domain.student.dto.PatchLectureBasketNameRequest
 import com.example.course.domain.student.dto.PostAddLectureToBasketRequest
 import com.example.course.domain.student.dto.PostLectureBasketRequest
@@ -65,6 +66,16 @@ class LectureBasketController(
         return ApiUtil.success(response)
     }
 
+    @GetMapping("/{lectureBasketId}/lectures/{lectureInBasketId}")
+    fun readLectureInBasket(
+        @PathVariable studentId: Long,
+        @PathVariable lectureBasketId: Long,
+        @PathVariable lectureInBasketId: Long
+    ): ApiResponse<GetLectureInBasketResponse> {
+        val response = lectureBasketService.findLectureInBasket(studentId, lectureBasketId, lectureInBasketId)
+        return ApiUtil.success(response)
+    }
+
     @PatchMapping("/{lectureBasketId}/name")
     fun updateLectureBasketName(
         @PathVariable studentId: Long,
@@ -84,17 +95,17 @@ class LectureBasketController(
         return ApiUtil.successOnly()
     }
 
-    @PatchMapping("/{lectureBasketId}/lectures/{lectureId}/color")
+    @PatchMapping("/{lectureBasketId}/lectures/{lectureInBasketId}/color")
     fun updateLectureBasketColor(
         @PathVariable studentId: Long,
         @PathVariable lectureBasketId: Long,
-        @PathVariable lectureId: Long,
+        @PathVariable lectureInBasketId: Long,
         @RequestBody request: PatchLectureColorInBasketRequest
     ): ApiResponse<Void> {
         lectureBasketService.modifyLectureColorInBasket(
             studentId,
             lectureBasketId,
-            lectureId,
+            lectureInBasketId,
             request
         )
         return ApiUtil.successOnly()
@@ -109,13 +120,13 @@ class LectureBasketController(
         return ApiUtil.successOnly()
     }
 
-    @DeleteMapping("/{lectureBasketId}/lectures/{lectureId}")
+    @DeleteMapping("/{lectureBasketId}/lectures/{lectureInBasketId}")
     fun removeLectureInBasket(
         @PathVariable studentId: Long,
         @PathVariable lectureBasketId: Long,
-        @PathVariable lectureId: Long
+        @PathVariable lectureInBasketId: Long
     ): ApiResponse<Void> {
-        lectureBasketService.deleteLectureInBasket(studentId, lectureBasketId, lectureId)
+        lectureBasketService.deleteLectureInBasket(studentId, lectureBasketId, lectureInBasketId)
         return ApiUtil.successOnly()
     }
 }
