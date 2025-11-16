@@ -58,7 +58,9 @@ class LectureBasketService(
         val lecture = lectureRepository.findById(request.lectureId!!)
             .orElseThrow { LectureNotFoundException() }
 
-        lectureBasket.addLecture(lecture) { lectureTimeRepository.findAllByLectureId(lecture.id!!) }
+        lectureBasket.addLecture(lecture) { id ->
+            lectureTimeRepository.findAllByLectureId(id)
+        }
 
         lectureBasketRepository.save(lectureBasket)
     }
