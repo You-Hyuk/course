@@ -1,5 +1,6 @@
 package com.example.course.domain.student.controller
 
+import com.example.course.domain.student.dto.GetStudentResponse
 import com.example.course.domain.student.dto.PostStudentRequest
 import com.example.course.domain.student.dto.PostStudentSignInRequest
 import com.example.course.domain.student.dto.PostStudentSignInResponse
@@ -7,6 +8,8 @@ import com.example.course.domain.student.service.StudentService
 import com.example.course.global.response.ApiResponse
 import com.example.course.global.util.ApiUtil
 import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,6 +29,12 @@ class StudentController(
     @PostMapping("/signin")
     fun processSignIn(@Valid @RequestBody request: PostStudentSignInRequest): ApiResponse<PostStudentSignInResponse> {
         val response = studentService.signIn(request)
+        return ApiUtil.success(response)
+    }
+
+    @GetMapping("/{studentId}")
+    fun readStudent(@PathVariable studentId: Long): ApiResponse<GetStudentResponse> {
+        val response = studentService.findStudent(studentId)
         return ApiUtil.success(response)
     }
 }
