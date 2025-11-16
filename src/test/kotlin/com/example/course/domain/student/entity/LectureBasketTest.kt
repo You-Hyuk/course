@@ -9,6 +9,7 @@ import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.DuplicateLectureInBasketException
 import com.example.course.domain.student.exception.InvalidLectureBasketNameLengthException
 import com.example.course.domain.student.exception.InvalidLectureSemesterException
+import com.example.course.domain.student.exception.LectureNotFoundInBasketException
 import com.example.course.domain.student.exception.LectureTimeConflictException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -367,4 +368,61 @@ class LectureBasketTest {
             lectureBasket.addLecture(lecture, loadTimes)
         }
     }
+
+    @Test
+    fun 수강_바구니에_존재하지_않는_강의를_삭제하는_경우_예외_발생() {
+        //given
+        val lectureBasket = LectureBasket(
+            id = 1,
+            name = "name",
+            studentId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            status = Status.DEFAULT
+        )
+        val lecture = Lecture(
+            id = 1,
+            courseId = 1,
+            professorId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            capacity = 30,
+            currentEnrollment = 0,
+            code = "10001"
+        )
+
+        // when & then
+        assertThrows<LectureNotFoundInBasketException> {
+            lectureBasket.removeLecture(lecture)
+        }
+    }
+
+    @Test
+    fun 수강_바구니에_존재하지_않는_강의의_색상을_변경하는_경우_예외_발생() {
+        //given
+        val lectureBasket = LectureBasket(
+            id = 1,
+            name = "name",
+            studentId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            status = Status.DEFAULT
+        )
+        val lecture = Lecture(
+            id = 1,
+            courseId = 1,
+            professorId = 1,
+            year = 2025,
+            semester = Semester.SECOND,
+            capacity = 30,
+            currentEnrollment = 0,
+            code = "10001"
+        )
+
+        // when & then
+        assertThrows<LectureNotFoundInBasketException> {
+            lectureBasket.changeColor(lecture.id!!, Color.COLOR_2)
+        }
+    }
+
 }
