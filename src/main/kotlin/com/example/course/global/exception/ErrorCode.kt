@@ -36,9 +36,10 @@ enum class ErrorCode(
     LECTURE_NOT_FOUND(HttpStatus.NOT_FOUND, "L000", "해당 강의가 존재하지 않습니다."),
     LECTURE_CAPACITY_EXCEEDED(HttpStatus.BAD_REQUEST, "L001", "강의 수강 인원이 가득 찼습니다."),
 
-    // Lecture Basket Lecture
-    DUPLICATE_LECTURE_IN_BASKET(HttpStatus.BAD_REQUEST, "LBL000", "동일한 강의가 수강 바구니에 존재합니다."),
-    LECTURE_NOT_FOUND_IN_BASKET(HttpStatus.NOT_FOUND, "LBL001", "해당 강의가 수강 바구니에 존재하지 않습니다."),
+    // Lecture In Basket
+    DUPLICATE_LECTURE_IN_BASKET(HttpStatus.BAD_REQUEST, "LIB000", "동일한 강의가 수강 바구니에 존재합니다."),
+    LECTURE_NOT_FOUND_IN_BASKET(HttpStatus.NOT_FOUND, "LIB001", "해당 강의가 수강 바구니에 존재하지 않습니다."),
+    LECTURE_IN_BASKET_NOT_FOUND(HttpStatus.NOT_FOUND, "LIB002", "해당 수강 바구니 내의 강의가 존재하지 않습니다."),
 
     // Professor
     PROFESSOR_NOT_FOUND(HttpStatus.NOT_FOUND, "P000", "해당 교수가 존재하지 않습니다."),
