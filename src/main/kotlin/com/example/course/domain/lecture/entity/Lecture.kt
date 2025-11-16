@@ -1,6 +1,7 @@
 package com.example.course.domain.lecture.entity
 
 import com.example.course.domain.lecture.enums.Semester
+import com.example.course.domain.lecture.exception.LectureCapacityExceededException
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -36,8 +37,23 @@ class Lecture(
     val capacity: Int,
 
     @Column(name = "current_enrollment", updatable = true, nullable = false)
-    val currentEnrollment: Int,
+    var currentEnrollment: Int,
 
     @Column(name = "code", nullable = false, updatable = false)
     val code: String
-)
+) {
+    fun enroll() {
+        validateCapacity()
+        this.currentEnrollment++
+    }
+
+    fun cancel() {
+        this.currentEnrollment--
+    }
+
+    private fun validateCapacity() {
+        if (capacity < currentEnrollment + 1) {
+            throw LectureCapacityExceededException()
+        }
+    }
+}

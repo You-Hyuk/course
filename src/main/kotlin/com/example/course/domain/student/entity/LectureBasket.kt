@@ -64,10 +64,12 @@ class LectureBasket(
             ),
             loadTimes
         )
+        lecture.enroll()
     }
 
     fun removeLecture(lecture: Lecture) {
         lectures.remove(lecture)
+        lecture.cancel()
     }
 
     fun changeColor(lectureId: Long, color: Color) {
