@@ -10,6 +10,7 @@ import com.example.course.domain.student.dto.PatchLectureColorInBasketRequest
 import com.example.course.domain.student.service.LectureBasketService
 import com.example.course.global.response.ApiResponse
 import com.example.course.global.util.ApiUtil
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -28,7 +29,7 @@ class LectureBasketController(
     fun addLectureToBasket(
         @PathVariable studentId: Long,
         @PathVariable lectureBasketId: Long,
-        @RequestBody request: PostAddLectureToBasketRequest
+        @Valid @RequestBody request: PostAddLectureToBasketRequest
     ): ApiResponse<Void> {
         lectureBasketService.addLectureToBasket(studentId, lectureBasketId, request)
         return ApiUtil.successOnly()
@@ -37,7 +38,7 @@ class LectureBasketController(
     @PostMapping
     fun generateLectureBasket(
         @PathVariable studentId: Long,
-        @RequestBody request: PostLectureBasketRequest
+        @Valid @RequestBody request: PostLectureBasketRequest
     ): ApiResponse<Void> {
         lectureBasketService.generateLectureBasket(studentId, request)
         return ApiUtil.successOnly()
@@ -80,7 +81,7 @@ class LectureBasketController(
     fun updateLectureBasketName(
         @PathVariable studentId: Long,
         @PathVariable lectureBasketId: Long,
-        @RequestBody request: PatchLectureBasketNameRequest
+        @Valid @RequestBody request: PatchLectureBasketNameRequest
     ): ApiResponse<Void> {
         lectureBasketService.modifyLectureBasketName(studentId, lectureBasketId, request)
         return ApiUtil.successOnly()
@@ -100,7 +101,7 @@ class LectureBasketController(
         @PathVariable studentId: Long,
         @PathVariable lectureBasketId: Long,
         @PathVariable lectureInBasketId: Long,
-        @RequestBody request: PatchLectureColorInBasketRequest
+        @Valid @RequestBody request: PatchLectureColorInBasketRequest
     ): ApiResponse<Void> {
         lectureBasketService.modifyLectureColorInBasket(
             studentId,
