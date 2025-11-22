@@ -42,6 +42,10 @@ class LecturesInBasket(
         target.changeColor(color)
     }
 
+    fun contain(lectureInBasket: LectureInBasket): Boolean {
+        return lectures.any { it.id == lectureInBasket.id }
+    }
+
     fun toList(): List<LectureInBasket> {
         return lectures.toList()
     }

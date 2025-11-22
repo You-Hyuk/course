@@ -145,6 +145,8 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        lectureBasket.validateLectureInBasket(lectureInBasket)
+
         val lecture = findLecture(lectureInBasket.lectureId)
 
         lectureBasket.removeLecture(lecture)
@@ -194,6 +196,7 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        lectureBasket.validateLectureInBasket(lectureInBasket)
 
         lectureBasket.changeColor(lectureInBasket.lectureId, request.color!!)
     }
@@ -209,6 +212,8 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        lectureBasket.validateLectureInBasket(lectureInBasket)
+
         val lecture = findLectureByLectureInBasket(lectureInBasket)
         val course = findCourse(lecture)
         val professor = findProfessor(lecture)
