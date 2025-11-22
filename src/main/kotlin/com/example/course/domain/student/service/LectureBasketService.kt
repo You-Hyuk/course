@@ -55,6 +55,8 @@ class LectureBasketService(
 
         val lectureBasket = findLectureBasket(lectureBasketId)
 
+        validateLectureBasketAccess(lectureBasket, studentId)
+
         val lecture = lectureRepository.findById(request.lectureId!!)
             .orElseThrow { LectureNotFoundException() }
 
@@ -84,6 +86,7 @@ class LectureBasketService(
         validateStudentExists(studentId)
 
         val lectureBasket = findLectureBasket(lectureBasketId)
+        validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureDtos = lectureBasket.getLectures()
             .map { buildLectureInBasketDto(it.lectureId) }
