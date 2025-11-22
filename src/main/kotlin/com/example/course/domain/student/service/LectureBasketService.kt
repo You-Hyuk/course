@@ -76,7 +76,7 @@ class LectureBasketService(
             name = request.lectureBasketName!!,
             year = request.year!!,
             semester = request.semester!!,
-            status = determineLectureBasketStatus(request.year, request.semester),
+            status = determineLectureBasketStatus(studentId, request.year, request.semester),
         )
 
         lectureBasketRepository.save(lectureBasket)
@@ -248,8 +248,8 @@ class LectureBasketService(
         return lectureBasket
     }
 
-    private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
-        if (lectureBasketRepository.existsByYearAndSemester(year, semester)) {
+    private fun determineLectureBasketStatus(studentId: Long, year: Int, semester: Semester): Status {
+        if (lectureBasketRepository.existsByStudentIdAndYearAndSemester(studentId, year, semester)) {
             return Status.NORMAL
         }
         return Status.DEFAULT

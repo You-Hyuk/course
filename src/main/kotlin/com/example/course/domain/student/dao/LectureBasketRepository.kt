@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 
 interface LectureBasketRepository : JpaRepository<LectureBasket, Long> {
-    fun existsByYearAndSemester(year: Int, semester: Semester): Boolean
+    fun existsByStudentIdAndYearAndSemester(studentId: Long, year: Int, semester: Semester): Boolean
 
     fun findLectureBasketsByStudentId(studentId: Long): List<LectureBasket>
 
