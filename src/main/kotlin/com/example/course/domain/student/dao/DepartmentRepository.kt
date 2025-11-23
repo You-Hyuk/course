@@ -15,4 +15,6 @@ interface DepartmentRepository : JpaRepository<Department, Long> {
     """
     )
     fun findIdsByNameContaining(name: String): List<Long>
+
+    fun findAllByIdIn(ids: List<Long>): List<Department>
 }
