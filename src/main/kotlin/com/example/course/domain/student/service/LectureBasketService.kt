@@ -89,7 +89,7 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureDtos = lectureBasket.getLectures()
-            .map { buildLectureInBasketDto(it.lectureId) }
+            .map { buildLectureInBasketDto(it) }
 
         return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
     }
@@ -131,7 +131,7 @@ class LectureBasketService(
             ?: return GetLectureBasketResponse.empty(year, semester)
 
         val lectureDtos = lectureBasket.getLectures()
-            .map { buildLectureInBasketDto(it.lectureId) }
+            .map { buildLectureInBasketDto(it) }
 
         return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
     }
@@ -255,18 +255,24 @@ class LectureBasketService(
         return Status.DEFAULT
     }
 
-    private fun buildLectureInBasketDto(lectureId: Long): LectureInBasketDto {
+    private fun buildLectureInBasketDto(lectureInBasket: LectureInBasket): LectureInBasketDto {
+        val lectureId = lectureInBasket.lectureId
+
         val lecture = lectureRepository.findById(lectureId)
             .orElseThrow { LectureNotFoundException() }
 
         val course = findCourse(lecture)
-
         val professor = findProfessor(lecture)
 
         val times = lectureTimeRepository.findAllByLectureId(lectureId)
-        val timeSlots = times.map { it.timeSlot }
+        val lectureTimes = times.map { it.timeSlot }.toMergedTimeRanges()
 
-        return LectureInBasketDto.from(lecture, course, professor, timeSlots.toMergedTimeRanges())
+        return LectureInBasketDto.from(
+            lectureInBasket = lectureInBasket,
+            course = course,
+            professor = professor,
+            lectureTimes = lectureTimes
+        )
     }
 
     private fun findProfessor(lecture: Lecture): Professor {
