@@ -15,6 +15,7 @@ import com.example.course.domain.lecture.enums.Semester
 import com.example.course.domain.lecture.enums.TimeSlot
 import com.example.course.domain.lecture.util.toMergedTimeRanges
 import com.example.course.domain.student.dao.DepartmentRepository
+import com.example.course.domain.student.entity.Department
 import com.example.course.domain.student.util.SemesterResolver
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -142,17 +143,25 @@ class LectureService(
         )
     }
 
+    private fun findDepartmentMap(courses: List<Course>): Map<Long, Department> {
+        val departmentIds = courses.map { it.departmentId }.distinct()
+        val departments = departmentRepository.findAllByIdIn(departmentIds)
+        return departments.associateBy { it.id!! }
+    }
+
     private fun mapToLectureDtos(lectures: List<Lecture>): List<LectureDto> {
         val lectureTimeMap = findLectureTimeMap(lectures)
         val courseMap = findCourseMap(lectures)
         val professorMap = findProfessorMap(lectures)
+        val departmentMap = findDepartmentMap(courseMap.values.toList())
 
         return lectures.map { lecture ->
             val course = courseMap[lecture.courseId]!!
             val professor = professorMap[lecture.professorId]!!
             val times = lectureTimeMap[lecture.id]!!
             val lectureTimes = times.map { it.timeSlot }.toMergedTimeRanges()
-            LectureDto.from(lecture, course, professor, lectureTimes)
+            val department = departmentMap[course.departmentId]!!
+            LectureDto.from(lecture, course, professor, department, lectureTimes)
         }
     }
 

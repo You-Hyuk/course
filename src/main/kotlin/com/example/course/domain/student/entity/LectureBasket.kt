@@ -8,6 +8,7 @@ import com.example.course.domain.student.enums.Status
 import com.example.course.domain.student.exception.InvalidLectureBasketNameLengthException
 import com.example.course.domain.student.exception.InvalidLectureSemesterException
 import com.example.course.domain.student.exception.LectureBasketDeletionDeniedException
+import com.example.course.domain.student.exception.LectureNotFoundInBasketException
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -95,6 +96,12 @@ class LectureBasket(
     fun changeStatusToDefault(defaultLectureBasket: LectureBasket) {
         defaultLectureBasket.status = Status.NORMAL
         this.status = Status.DEFAULT
+    }
+
+    fun validateLectureInBasket(lectureInBasket: LectureInBasket) {
+        if (!lectures.contain(lectureInBasket)) {
+            throw LectureNotFoundInBasketException()
+        }
     }
 
     private fun validateNameLength(name: String) {

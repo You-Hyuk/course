@@ -55,6 +55,8 @@ class LectureBasketService(
 
         val lectureBasket = findLectureBasket(lectureBasketId)
 
+        validateLectureBasketAccess(lectureBasket, studentId)
+
         val lecture = lectureRepository.findById(request.lectureId!!)
             .orElseThrow { LectureNotFoundException() }
 
@@ -74,7 +76,7 @@ class LectureBasketService(
             name = request.lectureBasketName!!,
             year = request.year!!,
             semester = request.semester!!,
-            status = determineLectureBasketStatus(request.year, request.semester),
+            status = determineLectureBasketStatus(studentId, request.year, request.semester),
         )
 
         lectureBasketRepository.save(lectureBasket)
@@ -84,9 +86,10 @@ class LectureBasketService(
         validateStudentExists(studentId)
 
         val lectureBasket = findLectureBasket(lectureBasketId)
+        validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureDtos = lectureBasket.getLectures()
-            .map { buildLectureInBasketDto(it.lectureId) }
+            .map { buildLectureInBasketDto(it) }
 
         return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
     }
@@ -128,7 +131,7 @@ class LectureBasketService(
             ?: return GetLectureBasketResponse.empty(year, semester)
 
         val lectureDtos = lectureBasket.getLectures()
-            .map { buildLectureInBasketDto(it.lectureId) }
+            .map { buildLectureInBasketDto(it) }
 
         return GetLectureBasketResponse.from(lectureBasket, lectureDtos)
     }
@@ -142,6 +145,8 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        lectureBasket.validateLectureInBasket(lectureInBasket)
+
         val lecture = findLecture(lectureInBasket.lectureId)
 
         lectureBasket.removeLecture(lecture)
@@ -191,6 +196,7 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        lectureBasket.validateLectureInBasket(lectureInBasket)
 
         lectureBasket.changeColor(lectureInBasket.lectureId, request.color!!)
     }
@@ -206,6 +212,8 @@ class LectureBasketService(
         validateLectureBasketAccess(lectureBasket, studentId)
 
         val lectureInBasket = findLectureInBasket(lectureInBasketId)
+        lectureBasket.validateLectureInBasket(lectureInBasket)
+
         val lecture = findLectureByLectureInBasket(lectureInBasket)
         val course = findCourse(lecture)
         val professor = findProfessor(lecture)
@@ -240,25 +248,31 @@ class LectureBasketService(
         return lectureBasket
     }
 
-    private fun determineLectureBasketStatus(year: Int, semester: Semester): Status {
-        if (lectureBasketRepository.existsByYearAndSemester(year, semester)) {
+    private fun determineLectureBasketStatus(studentId: Long, year: Int, semester: Semester): Status {
+        if (lectureBasketRepository.existsByStudentIdAndYearAndSemester(studentId, year, semester)) {
             return Status.NORMAL
         }
         return Status.DEFAULT
     }
 
-    private fun buildLectureInBasketDto(lectureId: Long): LectureInBasketDto {
+    private fun buildLectureInBasketDto(lectureInBasket: LectureInBasket): LectureInBasketDto {
+        val lectureId = lectureInBasket.lectureId
+
         val lecture = lectureRepository.findById(lectureId)
             .orElseThrow { LectureNotFoundException() }
 
         val course = findCourse(lecture)
-
         val professor = findProfessor(lecture)
 
         val times = lectureTimeRepository.findAllByLectureId(lectureId)
-        val timeSlots = times.map { it.timeSlot }
+        val lectureTimes = times.map { it.timeSlot }.toMergedTimeRanges()
 
-        return LectureInBasketDto.from(lecture, course, professor, timeSlots.toMergedTimeRanges())
+        return LectureInBasketDto.from(
+            lectureInBasket = lectureInBasket,
+            course = course,
+            professor = professor,
+            lectureTimes = lectureTimes
+        )
     }
 
     private fun findProfessor(lecture: Lecture): Professor {
